@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FaqBlock from "../components/FaqBlock.astro";
+import NewsletterForm from "../components/NewsletterForm.astro";
 import Hojas from "../components/Hojas.astro";
 import VideoFacade from "../components/VideoFacade.astro";
 import { COLABORACION } from "../lib/capacitacion";
 import {
-  BLOQUES,
+  ALCANCE,
+  DIAS,
   EMPIEZA,
-  ENTREGABLES,
   FAQ_EMPIEZA,
   HORARIO,
   INCLUYE,
@@ -31,11 +32,19 @@ const jsonLd = graph(
   ]),
 );
 
-/* Varias fechas: el botón apunta a la primera con lugares; las agotadas se
-   quedan a la vista mientras no pasen, como prueba de que se llenaron. */
+/* Una edición hoy (el reto de diciembre). Si el evento de nas.com todavía no
+   existe, `checkout` es null: la página no muestra botón de compra y dice que
+   el registro abre en unos días. Si se llena, `agotado` lo apaga. */
 const ediciones = edicionesVigentes();
 const abierta = edicionAbierta();
 const urlAbierta = abierta ? checkoutDe(abierta) : null;
+const hayPorAbrir = ediciones.some((e) => !e.agotado && !e.checkout);
+/* Sin checkout abierto, el botón nunca queda muerto: o avisa cuándo abre
+   (evento por crear en nas.com) o avisa de la siguiente edición (se llenó o ya
+   pasó la fecha). Con checkout, manda a comprar y el cuadro no se monta. */
+const modoAviso = !urlAbierta;
+const textoBoton = hayPorAbrir ? "El registro abre en unos días" : "Avísame de la siguiente edición";
+const tituloAviso = hayPorAbrir ? "Avísame cuándo abre el registro" : "Avísame de la siguiente edición";
 const fechaFolio = abierta?.fechaTexto ?? ediciones[0]?.fechaTexto ?? "Próxima fecha por anunciar";
 /* Daniel es la prueba de esta página: su "analfabetos en programación" es
    exactamente el miedo de quien la lee. */
@@ -43,7 +52,7 @@ const daniel = TESTIMONIOS.find((t) => t.slug === "daniel-souza");
 
 const NAV: readonly Enlace[] = [
   { label: "Para quién", href: "#para-quien" },
-  { label: "Las dos horas", href: "#las-dos-horas" },
+  { label: "Día por día", href: "#la-semana" },
   { label: "Lo que necesitas", href: "#necesitas" },
   { label: "Preguntas", href: "#faq" },
 ];
@@ -51,40 +60,39 @@ const NAV: readonly Enlace[] = [
    ellos, a la ficha, que es donde se explica qué sigue. */
 const CTA: Enlace = urlAbierta
   ? { label: "Apartar mi lugar", href: urlAbierta }
-  : { label: "Próxima fecha", href: "#apartar" };
+  : { label: "Avísame cuándo", href: "#apartar" };
 ---
 
 <BaseLayout
-  title={`${EMPIEZA.nombreCompleto}. Taller en vivo para empezar sin saber nada`}
-  description={`Taller en vivo de 2 horas, ${fechaFolio.toLowerCase()}: sales con un proyecto de Claude configurado, un prompt que cita el fundamento y tu primer lote de XML revisado. Sin conocimientos previos. ${EMPIEZA.precioTexto}.`}
+  title={`${EMPIEZA.nombreCompleto}. Cinco días, una hora diaria`}
+  description={`Reto en vivo de 5 días, de lunes a viernes, ${fechaFolio.toLowerCase()}: pasas de probar la IA a trabajar con ella. Cada día termina con algo hecho en tu pantalla. Sin conocimientos previos. ${EMPIEZA.precioTexto}.`}
   jsonLd={jsonLd}
   nav={NAV}
   cta={CTA}
 >
   {/*
     Los mundos de la home (Hojas.astro, 2026-10-01): día, noche, día, noche,
-    día. Elegida por Israel el 2026-10-13 entre tres variantes (ver
-    docs/empieza-rediseno-2026-10.md). `data-pausa` es el ritmo de lectura:
-    una hoja alta se queda fija 30% de la ventana con su final a la vista antes
-    de que la siguiente la tape (en la home no se usa).
+    día. `data-pausa` es el ritmo de lectura: una hoja alta se queda fija 30%
+    de la ventana con su final a la vista antes de que la siguiente la tape.
+    Desde el 2026-11-03 la página vende el reto de 5 días; la línea de tiempo
+    (#la-semana) reemplaza a "las dos horas" del taller.
   */}
   <main data-pausa="0.3">
     <div class="mundo" data-mundo="dia">
       <section class="hero">
         <div class="container-default hero-grid">
           <div>
-            <p class="folio">TALLER EN VIVO · <b>{fechaFolio.toUpperCase()}</b> · {HORARIO.inicio} · 2 HORAS</p>
+            <p class="folio">RETO EN VIVO · <b>{fechaFolio.toUpperCase()}</b> · {HORARIO.inicio} · 5 DÍAS</p>
             <h1 class="titulo-xl">{EMPIEZA.nombre}: <span class="hl">{EMPIEZA.titulo}</span></h1>
-            <p class="hero-headline">Sales con tres cosas hechas, no con apuntes.</p>
+            <p class="hero-headline">Cada día termina con algo hecho en tu pantalla.</p>
             {/*
               Sin mencionar el curso grande (Israel, 2026-10-13): quien llega
               sin contexto o prefiere "el otro" y no aprovecha este, o no sabe
-              de qué le hablamos. La escalera se sube DESPUÉS: al cierre del
-              taller, por correo o WhatsApp.
+              de qué le hablamos. La escalera se sube DESPUÉS.
             */}
             <p class="hero-gancho">
-              ¿Ni la has abierto, o la probaste y te contestó como blog?{" "}
-              <span class="tenue">En dos horas, en vivo y con tus propios casos, dejas de mirarla desde afuera.</span>
+              ¿La usas como buscador y cada respuesta sale distinta?{" "}
+              <span class="tenue">En cinco días, una hora diaria, la conviertes en flujos de trabajo que repites tú, con el fundamento a la vista.</span>
             </p>
             <div class="hero-precio">
               <p class="precio">
@@ -94,12 +102,13 @@ const CTA: Enlace = urlAbierta
               <div class="hero-acciones">
                 {urlAbierta ? (
                   <a class="btn btn-primary" href={urlAbierta} rel="noopener">Apartar mi lugar</a>
-                ) : ediciones.length ? (
-                  <span class="btn btn-primary btn-espera" aria-disabled="true">Cupo lleno. La siguiente fecha, en unos días</span>
                 ) : (
-                  <span class="btn btn-primary btn-espera" aria-disabled="true">Próxima fecha por anunciar</span>
+                  <div class="aviso-boton">
+                    <button type="button" class="btn btn-primary" data-aviso>{textoBoton}</button>
+                    <button type="button" class="aviso-nota" data-aviso>Clic aquí para apartar tu lugar</button>
+                  </div>
                 )}
-                <a class="btn btn-ghost" href="#las-dos-horas">Ver las dos horas</a>
+                <a class="btn btn-ghost" href="#la-semana">Ver los cinco días</a>
               </div>
               {ediciones.length > 1 && (
                 <ul class="fechas" aria-label="Fechas">
@@ -113,32 +122,34 @@ const CTA: Enlace = urlAbierta
               )}
             </div>
           </div>
-          <aside class="entregables" aria-labelledby="entregables-titulo">
-            {/* El video es atemporal (sin fecha ni precio) y sirve en cada
-                edición. Hasta que exista su ID de YouTube no se pinta. */}
-            {VIDEO_EMPIEZA.id && (
-              <div class="entregables-video">
-                <VideoFacade
-                  videoId={VIDEO_EMPIEZA.id}
-                  titulo={VIDEO_EMPIEZA.titulo}
-                  poster={VIDEO_EMPIEZA.poster}
-                  cinta={VIDEO_EMPIEZA.cinta}
-                />
-              </div>
-            )}
-            <p class="folio" id="entregables-titulo">CON QUÉ <b>SALES</b></p>
-            <ol>
-              {ENTREGABLES.map((e, i) => (
-                <li>
-                  <span class="entregable-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span>
-                    <b>{e.titulo}</b>
-                    <span class="entregable-texto">{e.texto}</span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </aside>
+          {/* El video va solo: el detalle de los cinco días ya vive en la línea
+              de tiempo de más abajo. Si no hay video (VIDEO_EMPIEZA.id null),
+              en su lugar va la lista corta de lo que te llevas. */}
+          {VIDEO_EMPIEZA.id ? (
+            <div class="hero-video">
+              <VideoFacade
+                videoId={VIDEO_EMPIEZA.id}
+                titulo={VIDEO_EMPIEZA.titulo}
+                poster={VIDEO_EMPIEZA.poster}
+                cinta={VIDEO_EMPIEZA.cinta}
+              />
+            </div>
+          ) : (
+            <aside class="entregables" aria-labelledby="entregables-titulo">
+              <p class="folio" id="entregables-titulo">CON QUÉ <b>SALES</b></p>
+              <ol>
+                {DIAS.map((d, i) => (
+                  <li>
+                    <span class="entregable-num">{String(i + 1).padStart(2, "0")}</span>
+                    <span>
+                      <b>{d.sale}</b>
+                      <span class="entregable-texto">{d.dia} {d.fecha}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </aside>
+          )}
         </div>
       </section>
 
@@ -154,36 +165,64 @@ const CTA: Enlace = urlAbierta
             ))}
           </div>
           <p class="no-es" data-reveal>
-            Y para quién no: si ya usas proyectos de Claude y quieres construir
-            con Claude Code, este taller se te queda corto. <a href="#faq">Aquí te digo por dónde seguir.</a>
+            Y para quién no: si buscas construir una plataforma completa, con
+            servidor y base de datos, este reto se te queda corto.{" "}
+            <a href="#faq">Aquí te digo por dónde seguir.</a>
           </p>
         </div>
       </section>
     </div>
 
     <div class="mundo" data-mundo="noche">
-      <section id="las-dos-horas">
+      <section id="la-semana">
         <div class="container-default">
-          <div class="sec-head"><h2 class="folio">LAS <b>DOS HORAS</b>, EN CINCO BLOQUES</h2></div>
-          {/* Sin minutos (Israel, 2026-10-13): a veces se extiende o va más
-              rápido y no quiere la presión del reloj. El orden sí es fijo. */}
+          <div class="sec-head"><h2 class="folio">LA SEMANA, <b>DÍA POR DÍA</b></h2></div>
           <p class="intro-bloques" data-reveal>
-            Ritmo de taller, no de plática: cada bloque termina con algo hecho en
-            tu pantalla. El orden es este; los tiempos se ajustan al grupo. Los
-            datos son ficticios y te los llevas.
+            Cada día se apoya en el anterior: pides bien, das trabajo, lo
+            vuelves repetible, lo fundamentas y lo empaquetas. Una hora diaria,
+            de {HORARIO.inicio} a {HORARIO.fin}, hora del centro. Los datos son
+            ficticios y te los llevas.
           </p>
-          <ol class="bloques">
-            {BLOQUES.map((b, i) => (
-              <li class="bloque" data-reveal>
-                <span class="bloque-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{b.titulo}</h3>
-                  <p>{b.texto}</p>
-                  <p class="bloque-sale"><span class="folio">SALES CON</span> {b.sale}</p>
-                </div>
+
+          {/* El avance: cinco etapas que se van encendiendo conforme bajas.
+              Es navegación (cada una lleva a su día) y, con JavaScript, el
+              indicador de dónde vas. Sin JS es solo el índice. */}
+          <nav class="etapas" aria-label="Las cinco etapas del reto">
+            <div class="etapas-barra" aria-hidden="true"><span class="etapas-relleno"></span></div>
+            <ol>
+              {DIAS.map((d, i) => (
+                <li data-etapa>
+                  <a href={`#dia-${i + 1}`}>
+                    <span class="etapa-num">{String(i + 1).padStart(2, "0")}</span>
+                    <span class="etapa-nombre">{d.etapa}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          <ol class="linea">
+            {DIAS.map((d, i) => (
+              <li class="dia" id={`dia-${i + 1}`} data-dia>
+                <span class="dia-nodo" aria-hidden="true"></span>
+                <article class="dia-card">
+                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b> · {HORARIO.inicio} A {HORARIO.fin}</p>
+                  <h3>{d.titulo}</h3>
+                  <p class="dia-texto">{d.texto}</p>
+                  <div class="salto">
+                    <p><span class="folio">ANTES</span>{d.antes}</p>
+                    <p class="salto-despues"><span class="folio">DESPUÉS</span>{d.despues}</p>
+                  </div>
+                  <p class="bloque-sale"><span class="folio">SALES CON</span> {d.sale}</p>
+                </article>
               </li>
             ))}
           </ol>
+
+          <div class="alcance" data-reveal>
+            <p><span class="folio">SÍ HACEMOS</span>{ALCANCE.si}</p>
+            <p><span class="folio">NO HACEMOS</span>{ALCANCE.no}</p>
+          </div>
         </div>
       </section>
 
@@ -192,24 +231,25 @@ const CTA: Enlace = urlAbierta
           <div class="sec-head"><h2 class="folio">LO QUE <b>NECESITAS</b></h2></div>
           <div class="necesitas" data-reveal>
             {/*
-              Claude Pro se RECOMIENDA, no se exige (decisión de Israel,
-              2026-10-12; antes era obligatorio). El porqué (el límite del plan
-              gratuito se agota a media práctica) y la salida (se cancela antes
-              de que se renueve) están en el bloque y en la FAQ. El precio va
-              en dólares, como lo muestra Claude, con el aproximado en pesos.
+              En el RETO Claude Pro es NECESARIO (decisión de Israel,
+              2026-11-03; en el taller de 2 horas era solo recomendado): los
+              scripts y las skills consumen muchos más tokens y no se quiere
+              que nadie se quede limitado a media clase. El porqué y la salida
+              (se cancela antes de que se renueve) están aquí y en la FAQ. El
+              precio va en dólares, como lo muestra Claude, con el aproximado
+              en pesos.
             */}
             <p>
-              <b>Una suscripción a {EMPIEZA.herramienta.nombre}, que te recomiendo.</b>{" "}
-              Cuesta {EMPIEZA.herramienta.costoTexto}. El plan gratuito tiene
-              límites de uso, y si se te acaban a media práctica te quedas a
-              medias. Si después del taller no te sirve, la cancelas antes de que
-              se renueve. Apuesto a que no la cancelas: con lo que vemos en las
-              dos horas, el tiempo que recuperas vale mucho más que eso. Si no la
-              tienes, en el correo de confirmación te digo cómo sacarla en cinco
-              minutos.
+              <b>Una suscripción a {EMPIEZA.herramienta.nombre}.</b>{" "}
+              Cuesta {EMPIEZA.herramienta.costoTexto}. Lo que vemos en el reto
+              (scripts, skills, lotes de XML) consume bastantes más tokens que
+              un chat normal, y con el plan gratuito te quedarías limitado a
+              media clase. Se paga aparte; si después del reto no te sirve, la
+              cancelas antes de que se renueve.
               <span class="nota-fecha">Precio en claude.com/pricing, verificado el {EMPIEZA.herramienta.verificado}.</span>
             </p>
             <p><b>Computadora, no celular.</b> Se trabaja en vivo, con archivos.</p>
+            <p><b>Una hora diaria, a las {HORARIO.inicio}.</b> De lunes a viernes. Si falta un día tienes la grabación.</p>
             <p><b>Nada más.</b> Ni programación, ni IA, ni haber leído nada. Cero.</p>
           </div>
         </div>
@@ -226,16 +266,22 @@ const CTA: Enlace = urlAbierta
               <p class="prueba-texto">
                 {daniel.nombre} lleva solo su despacho en {daniel.ciudad}. Hoy
                 encuentra en minutos la diferencia entre el auxiliar de bancos y el
-                estado de cuenta, que le tomaba horas. Lo cuenta en 3 minutos:{" "}
-                <a href={`/#testimonio-${daniel.slug}`}>su testimonio →</a>
+                estado de cuenta, que le tomaba horas. Lo cuenta él mismo, en {daniel.duracionTexto}:
               </p>
+              <div class="prueba-video">
+                <VideoFacade
+                  videoId={daniel.videoId}
+                  titulo={daniel.titulo}
+                  poster={daniel.poster}
+                  cinta={`${daniel.nombre}, ${daniel.ciudad}`}
+                />
+              </div>
             </figure>
           </div>
         </section>
       )}
 
-      {/* Antes de apartar: primero quién es, luego cuánto cuesta. El recorte
-          sin fondo reemplaza al círculo azul de la foto anterior. */}
+      {/* Antes de apartar: primero quién es, luego cuánto cuesta. */}
       <section id="autor">
         <div class="container-default">
           <div class="sec-head"><h2 class="folio">QUIÉN <b>LO DA</b></h2></div>
@@ -249,8 +295,8 @@ const CTA: Enlace = urlAbierta
               <p>
                 Cada jueves resuelvo un problema de despacho en vivo en{" "}
                 <a href="/jueves">Jueves de ContadorIA</a>, y doy los módulos de
-                Claude Code y de Excel en {COLABORACION?.nombre ?? "Claude para Contadores"}. Este taller
-                es lo que le daría a alguien antes de cualquiera de las dos cosas.
+                Claude Code y de Excel en {COLABORACION?.nombre ?? "Claude para Contadores"}. Este reto
+                es lo que le daría a alguien que quiere pasar de probar la IA a trabajar con ella.
               </p>
             </div>
             <img
@@ -280,29 +326,14 @@ const CTA: Enlace = urlAbierta
               </ul>
             </div>
             <div class="compra-der">
-              <p class="precio"><b>{EMPIEZA.precioTexto}</b> <span>pago único · recomendado: {EMPIEZA.herramienta.nombre}, aparte</span></p>
-              {ediciones.length > 1 ? (
-                <ul class="compra-fechas">
-                  {ediciones.map((e) => {
-                    const url = e.agotado ? null : checkoutDe(e, "ficha");
-                    return (
-                      <li class:list={{ agotada: e.agotado }}>
-                        <span>{e.fechaTexto}</span>
-                        {url ? (
-                          <a class="btn btn-primary" href={url} rel="noopener">Apartar mi lugar</a>
-                        ) : (
-                          <span class="folio">{e.agotado ? "AGOTADO" : "ABRE EN UNOS DÍAS"}</span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : urlAbierta ? (
-                <a class="btn btn-primary" href={urlAbierta} rel="noopener">Apartar mi lugar</a>
-              ) : ediciones.length ? (
-                <p class="espera-texto">Esta fecha se llenó. La siguiente se anuncia en unos días en el boletín; si quieres que te avise, <a href="/contacto">escríbeme</a>.</p>
+              <p class="precio"><b>{EMPIEZA.precioTexto}</b> <span>pago único · requiere {EMPIEZA.herramienta.nombre}, aparte</span></p>
+              {urlAbierta ? (
+                <a class="btn btn-primary" href={checkoutDe(abierta!, "ficha") ?? urlAbierta} rel="noopener">Apartar mi lugar</a>
               ) : (
-                <p class="espera-texto">Esta fecha ya pasó. La siguiente se anuncia en el boletín y en <a href="/jueves">Jueves de ContadorIA</a>.</p>
+                <div class="aviso-boton">
+                  <button type="button" class="btn btn-primary" data-aviso>{textoBoton}</button>
+                  <button type="button" class="aviso-nota" data-aviso>Clic aquí para apartar tu lugar</button>
+                </div>
               )}
               <p class="garantia folio">// {EMPIEZA.garantia.toUpperCase()}</p>
             </div>
@@ -321,11 +352,39 @@ const CTA: Enlace = urlAbierta
     </div>
   </main>
   <Hojas />
+
+  {/*
+    "Avísame cuándo": mientras el evento de nas.com no existe, los botones de
+    registro abren este cuadro, que recoge el correo en la lista `reto` de
+    Sendy (doble opt-in, una lista por promesa). <dialog> nativo: foco,
+    Escape y fondo salen solos. Va fuera de <main> y pide su mundo (noche)
+    porque el cuadro vive en la capa superior, fuera de las hojas.
+  */}
+  {modoAviso && (
+    <dialog class="aviso" id="aviso" data-mundo="noche" aria-labelledby="aviso-titulo">
+      <form method="dialog" class="aviso-cerrar-form">
+        <button class="aviso-cerrar" aria-label="Cerrar">×</button>
+      </form>
+      <p class="folio">{hayPorAbrir ? `CUPO DE ${EMPIEZA.cupo} · ${fechaFolio.toUpperCase()}` : "PRÓXIMA EDICIÓN"}</p>
+      <h2 id="aviso-titulo">{tituloAviso}</h2>
+      <p class="aviso-texto">
+        {hayPorAbrir
+          ? `Te escribo el día que abre, y no antes. Un solo correo. Los lugares son ${EMPIEZA.cupo} y se ocupan en orden de llegada.`
+          : "Te escribo cuando se abra la siguiente fecha, y no antes. Un solo correo."}
+      </p>
+      <NewsletterForm
+        boton="Avísame"
+        lista="reto"
+        exito="Listo. Confirma tu correo y te aviso en cuanto abra el registro."
+        nota="Sin spam. Te das de baja con un clic."
+      />
+    </dialog>
+  )}
 </BaseLayout>
 
 <script>
   import { PIXEL_EMPIEZA } from "../lib/empieza";
-  import { medirMeta } from "../lib/medir";
+  import { medir, medirMeta } from "../lib/medir";
   import { conOrigenDeVisita, esCheckoutNas } from "../lib/origen";
 
   // Pixel de Meta: quien llega a la página del taller. Sin datos personales.
@@ -377,6 +436,76 @@ const CTA: Enlace = urlAbierta
       location.assign(destino);
     }, 300);
   });
+
+  /* La línea de tiempo (#la-semana). Cada día está "pendiente", "activo" (cruza
+     una franja en medio de la ventana) o "hecho" (ya quedó arriba). Es un
+     IntersectionObserver y no un escucha de scroll: nada corre por cuadro. Las
+     clases las lee el CSS (nodo, tramo de línea, tarjeta, etapas y la barra);
+     sin JavaScript no se pone `reto-vivo` y todo se ve completo, sin estados. */
+  const dias = [...document.querySelectorAll<HTMLElement>("[data-dia]")];
+  const etapas = [...document.querySelectorAll<HTMLElement>("[data-etapa]")];
+  const nav = document.querySelector<HTMLElement>(".etapas");
+  if (dias.length && nav) {
+    document.documentElement.classList.add("reto-vivo");
+    const pos: Array<"arriba" | "dentro" | "abajo"> = dias.map(() => "abajo");
+    const pintar = () => {
+      let hechos = 0;
+      let activo = -1;
+      dias.forEach((d, i) => {
+        const estado = pos[i] === "dentro" ? "activo" : pos[i] === "arriba" ? "hecho" : "pendiente";
+        if (d.dataset.estado !== estado) d.dataset.estado = estado;
+        if (etapas[i] && etapas[i].dataset.estado !== estado) etapas[i].dataset.estado = estado;
+        if (estado === "hecho") hechos++;
+        if (estado === "activo") activo = i;
+      });
+      /* La barra avanza hasta el centro del chip activo; con todos hechos, llena. */
+      const llenos = hechos + (activo >= 0 ? 0.5 : 0);
+      nav.style.setProperty("--avance", String(Math.min(1, llenos / dias.length)));
+      nav.style.setProperty("--avance-paso", String(hechos + (activo >= 0 ? 1 : 0)));
+    };
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          const i = dias.indexOf(e.target as HTMLElement);
+          if (i < 0) continue;
+          pos[i] = e.isIntersecting ? "dentro" : e.boundingClientRect.top < 0 ? "arriba" : "abajo";
+        }
+        pintar();
+      },
+      { rootMargin: "-42% 0px -48% 0px" },
+    );
+    dias.forEach((d) => io.observe(d));
+    pintar();
+  }
+
+  /* "Avísame cuándo": cualquier [data-aviso] abre el cuadro. El clic en el
+     fondo (fuera de la tarjeta) lo cierra, además de Escape y la ×. */
+  const aviso = document.querySelector<HTMLDialogElement>("#aviso");
+  if (aviso) {
+    document.addEventListener("click", (e) => {
+      /* [data-aviso] son los botones de la página; el de la cabecera es un
+         enlace a #apartar (la cabecera es de cada página y solo recibe un
+         href), y mientras no haya checkout también abre el cuadro. */
+      const t = (e.target as HTMLElement | null)?.closest?.("[data-aviso], .site-header a[href='#apartar']");
+      if (!t) return;
+      e.preventDefault();
+      if (!aviso.open) aviso.showModal();
+      medir("aviso_reto_abierto");
+    });
+    aviso.addEventListener("click", (e) => {
+      if (e.target === aviso) aviso.close();
+    });
+  }
+
+  /* La franja de etapas es fija bajo la cabecera: se mide la cabecera real
+     (cambia con el ancho) y se publica como --alto-cab. */
+  const cabecera = document.querySelector<HTMLElement>(".site-header");
+  if (cabecera) {
+    const publicarAlto = () =>
+      document.documentElement.style.setProperty("--alto-cab", `${cabecera.offsetHeight}px`);
+    publicarAlto();
+    new ResizeObserver(publicarAlto).observe(cabecera);
+  }
 </script>
 
 <style>
@@ -439,6 +568,7 @@ const CTA: Enlace = urlAbierta
   }
   .hero-acciones {
     display: flex;
+    align-items: flex-start;
     gap: 0.9rem;
     flex-wrap: wrap;
   }
@@ -476,7 +606,11 @@ const CTA: Enlace = urlAbierta
     color: var(--color-ink-dim);
   }
 
-  /* Los tres entregables, en tarjeta: son el argumento entero */
+  .hero-video {
+    align-self: center;
+  }
+
+  /* Los entregables, en tarjeta (solo cuando no hay video) */
   .entregables {
     border: 1px solid var(--color-line-strong);
     border-radius: var(--radius-md);
@@ -644,10 +778,9 @@ const CTA: Enlace = urlAbierta
     color: var(--color-ink-soft);
     max-width: 58ch;
   }
-  .prueba-texto a {
-    font-weight: 700;
-    color: var(--color-accent);
-    text-decoration: none;
+  .prueba-video {
+    margin-top: 1.4rem;
+    max-width: 640px;
   }
 
   /* La tarjeta ocupa el ancho y se parte en dos: lo que incluye a la izquierda
@@ -774,5 +907,358 @@ const CTA: Enlace = urlAbierta
     color: var(--color-accent);
     font-weight: 700;
     text-decoration: none;
+  }
+
+  /* ---- Línea de tiempo del reto (#la-semana) ----
+     Los estados (pendiente / activo / hecho) los pone el script con
+     data-estado, pero SOLO bajo html.reto-vivo: sin JavaScript todo se ve
+     completo y encendido. El apagado va por color y fondo, nunca por opacity
+     (Lighthouse compone la opacidad y el contraste se hunde). El movimiento se
+     apaga con prefers-reduced-motion; los estados siguen, porque son color. */
+  /* La franja se queda fija bajo la cabecera mientras dura la línea de tiempo
+     (su contenedor es la sección, así que se suelta al terminar). El fondo
+     sale a todo el ancho con un recorte, y la cabecera mide --alto-cab (lo
+     pone el script) para que no se encimen. */
+  .etapas {
+    --avance: 1;
+    position: sticky;
+    top: var(--alto-cab, 4.5rem);
+    z-index: 4;
+    margin: 0 0 2rem;
+    padding: 0.9rem 0 0.8rem;
+  }
+  .etapas::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-bg);
+    box-shadow: 0 0 0 100vmax var(--color-bg);
+    clip-path: inset(0 -100vmax);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .etapas-barra {
+    position: relative;
+    margin-bottom: 0.7rem;
+    height: 3px;
+    background: var(--color-line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .etapas-relleno {
+    display: block;
+    height: 100%;
+    background: var(--color-accent);
+    transform-origin: left;
+    transform: scaleX(var(--avance));
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.reto-vivo .etapas {
+    --avance: 0;
+  }
+  .etapas ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+  }
+  .etapas a {
+    display: block;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-ink-soft);
+    background: transparent;
+    transition:
+      background 0.4s ease,
+      color 0.4s ease,
+      border-color 0.4s ease,
+      transform 0.4s ease;
+  }
+  .etapa-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+  .etapa-nombre {
+    display: block;
+    margin-top: 0.1rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  html.reto-vivo .etapas [data-estado="hecho"] a {
+    border-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+  html.reto-vivo .etapas [data-estado="activo"] a {
+    border-color: var(--color-accent);
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    transform: translateY(-3px);
+  }
+  /* En pantallas angostas la franja ocupa poco: cinco casillas con el número,
+     y solo la activa dice su nombre. */
+  @media (max-width: 760px) {
+    .etapas ol {
+      gap: 0.35rem;
+    }
+    .etapas a {
+      padding: 0.4rem 0.2rem;
+      text-align: center;
+    }
+    .etapa-nombre {
+      display: none;
+    }
+  }
+
+  .linea {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .dia {
+    position: relative;
+    display: block;
+    padding: 0 0 2.2rem 3.4rem;
+    scroll-margin-top: 5.5rem;
+  }
+  .dia:last-child {
+    padding-bottom: 0;
+  }
+  /* El tramo de línea que baja de este nodo al siguiente. Se llena cuando el
+     día queda atrás: es el avance de lo que ya sabes hacer. */
+  .dia::before {
+    content: "";
+    position: absolute;
+    left: 0.78rem;
+    top: 1.7rem;
+    bottom: -0.3rem;
+    width: 2px;
+    background: var(--color-line-strong);
+  }
+  .dia::after {
+    content: "";
+    position: absolute;
+    left: 0.78rem;
+    top: 1.7rem;
+    bottom: -0.3rem;
+    width: 2px;
+    background: var(--color-accent);
+    transform-origin: top;
+    transform: scaleY(1);
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .dia:last-child::before,
+  .dia:last-child::after {
+    display: none;
+  }
+  html.reto-vivo .dia::after {
+    transform: scaleY(0);
+  }
+  html.reto-vivo .dia[data-estado="hecho"]::after {
+    transform: scaleY(1);
+  }
+  .dia-nodo {
+    position: absolute;
+    left: 0;
+    top: 0.7rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    box-sizing: content-box;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background: var(--color-accent);
+    transition:
+      background 0.4s ease,
+      box-shadow 0.6s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.reto-vivo .dia[data-estado="pendiente"] .dia-nodo,
+  html.reto-vivo .dia:not([data-estado]) .dia-nodo {
+    background: var(--color-surface);
+    border-color: var(--color-line-strong);
+  }
+  html.reto-vivo .dia[data-estado="activo"] .dia-nodo {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 7px color-mix(in oklab, var(--color-accent) 22%, transparent);
+  }
+
+  .dia-card {
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+    padding: 1.4rem 1.7rem 1.3rem;
+    transition:
+      border-color 0.5s ease,
+      box-shadow 0.5s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.reto-vivo .dia[data-estado="activo"] .dia-card {
+    border-color: var(--color-accent);
+    box-shadow: 8px 8px 0 var(--color-line);
+    transform: translateX(6px);
+  }
+  html.reto-vivo .dia[data-estado="pendiente"] .dia-texto,
+  html.reto-vivo .dia:not([data-estado]) .dia-texto {
+    color: var(--color-ink-dim);
+  }
+  .dia-card h3 {
+    margin: 0.35rem 0 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .dia-texto {
+    margin: 0;
+    max-width: 64ch;
+    color: var(--color-ink-soft);
+    transition: color 0.5s ease;
+  }
+  /* De dónde a dónde: el salto del día, en una línea cada lado. */
+  .salto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem 1.4rem;
+    margin: 1rem 0 0.2rem;
+    padding: 0.9rem 0 0;
+    border-top: 1px dashed var(--color-line-strong);
+  }
+  @media (max-width: 640px) {
+    .salto {
+      grid-template-columns: 1fr;
+    }
+    .dia {
+      padding-left: 2.6rem;
+    }
+  }
+  .salto p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 0.93rem;
+  }
+  .salto .folio {
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+  .salto-despues {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .dia-card .bloque-sale {
+    margin: 0.9rem 0 0 !important;
+    color: var(--color-ink);
+  }
+  .dia-card .bloque-sale .folio {
+    margin-right: 0.4rem;
+  }
+
+  .alcance {
+    margin-top: 2.6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+  @media (max-width: 760px) {
+    .alcance {
+      grid-template-columns: 1fr;
+    }
+  }
+  .alcance p {
+    margin: 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-ink-soft);
+    font-size: 0.95rem;
+  }
+  .alcance .folio {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .etapas-relleno,
+    .etapas a,
+    .dia::after,
+    .dia-nodo,
+    .dia-card,
+    .dia-texto {
+      transition: none;
+    }
+    html.reto-vivo .etapas [data-estado="activo"] a,
+    html.reto-vivo .dia[data-estado="activo"] .dia-card,
+    html.reto-vivo .dia[data-estado="activo"] .dia-nodo {
+      transform: none;
+    }
+  }
+
+  /* ---- "Avísame cuándo" ---- */
+  .aviso-boton {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .compra-der .aviso-boton {
+    align-items: stretch;
+  }
+  .compra-der .aviso-nota {
+    text-align: center;
+  }
+  .aviso-nota {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+  .aviso {
+    margin: auto;
+    width: min(92vw, 30rem);
+    padding: 1.8rem 1.8rem 1.6rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    box-shadow: 10px 10px 0 var(--color-line);
+  }
+  .aviso::backdrop {
+    background: rgb(6 10 20 / 0.72);
+  }
+  .aviso h2 {
+    margin: 0.3rem 0 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.9rem;
+    line-height: 1.1;
+  }
+  .aviso-texto {
+    margin: 0 0 1.2rem;
+    color: var(--color-ink-soft);
+  }
+  .aviso-cerrar-form {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    margin: 0;
+  }
+  .aviso-cerrar {
+    border: 0;
+    background: none;
+    color: var(--color-ink-soft);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
   }
 </style>

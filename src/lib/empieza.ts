@@ -1,22 +1,21 @@
 /**
- * Taller "Empieza aquí": tu primer día con Claude (2 horas en vivo).
+ * "Empieza aquí": el reto de 5 días (30 de noviembre al 4 de diciembre de 2026).
  *
- * El escalón anterior a Claude para Contadores (Fiscalistas.AI). Sale de la
- * encuesta de agosto de 2026 al boletín: el 70 % estaba en nivel cero o
- * aficionado y no está listo para 8 horas de Claude Code. La definición
- * completa (precio, por qué Claude Pro recomendado, calendario de venta) vive
- * en `docs/taller-empieza-aqui.md`.
+ * Desde el 2026-11-03 (decisión de Israel) esta página ya no vende el taller
+ * de 2 horas ($697): vende el último taller del año convertido en reto, una
+ * hora diaria por Zoom.
  *
- * Este taller SÍ publica precio: es producto de precio fijo, como el ebook.
- * La regla de "no publicar" es del high ticket (aclaración de Israel,
- * 2026-09-20). El precio se escribe UNA vez (`PRECIO`) y de ahí salen la
- * página, la FAQ, el JSON-LD, llms.txt, llms-full.txt y el pixel de Meta.
+ * Esta página publica solo el precio fijo ($1,497; regla del 2026-09-20: los
+ * productos de precio fijo sí lo publican). Nada de condiciones especiales
+ * para grupos concretos: eso viaja por correo y WhatsApp, y su detalle vive en
+ * la ficha interna del reto (fuera del repo público).
  *
- * CADA EDICIÓN NUEVA se cambia aquí y en ningún otro archivo: la fecha y el
- * checkout en `EDICIONES`, y la hora en `HORARIO` si cambia.
+ * El precio se escribe UNA vez (`PRECIO`) y de ahí salen la página, la FAQ, el
+ * JSON-LD, llms.txt, llms-full.txt y el pixel de Meta. Al cambiarlo: esos
+ * cuatro lugares ya cuelgan de aquí.
  */
 
-const PRECIO = 697;
+const PRECIO = 1497;
 const MONEDA = "MXN";
 
 function conUtm(url: string, contenido: string): string {
@@ -29,19 +28,18 @@ function conUtm(url: string, contenido: string): string {
 }
 
 /**
- * Las ediciones. El cupo de 25 no se sube: si una fecha se llena se abre la
- * siguiente (decisión de Israel, 2026-09-20), y por eso esto es una lista.
- * Cada edición es un evento distinto en nas.com con su propio checkout (la
- * URL de compra directa, con el boleto elegido, no la página del evento).
+ * Las ediciones. El cupo de 25 no se sube: si una se llena se abre otra, y por
+ * eso esto es una lista. Cada edición es un evento distinto en nas.com con su
+ * propio checkout (la URL de compra directa, con el boleto elegido, no la
+ * página del evento).
  *
- * `agotado` se marca a mano en cuanto se venda el lugar 25: no sabemos si
- * nas.com cierra el boleto solo al llegar al cupo, y mientras no se pruebe,
- * el interruptor vive aquí. Una edición agotada se sigue mostrando (como
- * prueba de que se llenó) mientras no haya pasado su fecha.
+ * `agotado` se marca a mano en cuanto se venda el lugar 25.
  */
 export interface Edicion {
-  /** YYYY-MM-DD */
+  /** YYYY-MM-DD, primer día */
   inicio: string;
+  /** YYYY-MM-DD, último día */
+  fin: string;
   fechaTexto: string;
   /** Checkout directo en nas.com; null mientras el evento no exista */
   checkout: string | null;
@@ -50,44 +48,46 @@ export interface Edicion {
 
 export const EDICIONES: readonly Edicion[] = [
   {
-    inicio: "2026-10-29",
-    fechaTexto: "Jueves 29 de octubre",
-    checkout:
-      "https://nas.com/checkout-global?requestor=signupRequestor&communityCode=TODOCONTA_CLUB&communityId=67ab5a14d444670df4027cad&redirectTo=https%3A%2F%2Fnas.com%2Fmb%2Fcommunities%2F67ab5a14d444670df4027cad%2Fevents%2F6ad3ffacd4af52506ec9d19f&sourceInfoType=event&sourceInfoOrigin=6ad3ffacd4af52506ec9d19f",
+    inicio: "2026-11-30",
+    fin: "2026-12-04",
+    fechaTexto: "Del 30 de noviembre al 4 de diciembre",
+    /* Pegar aquí el checkout de nas.com cuando exista el evento. Mientras sea
+       null la página no muestra botón de compra (dice que el registro abre en
+       unos días). */
+    checkout: null,
   },
-  // Segunda edición, SOLO si la del 17 se llena: se destapa, se crea el
-  // evento en nas.com y se pega su checkout. Mientras, no existe para nadie.
-  // { inicio: "2026-11-05", fechaTexto: "Jueves 5 de noviembre", checkout: null },
 ];
 
 /**
- * La hora de las ediciones, del centro de México. Esa zona no cambia de
- * horario desde 2022, así que el desfase es fijo. De aquí salen el folio de la
- * página, el horario en texto y las fechas del JSON-LD.
+ * La hora de cada sesión, del centro de México. Esa zona no cambia de horario
+ * desde 2022, así que el desfase es fijo. Una hora diaria, de lunes a viernes.
  */
-export const HORARIO = { inicio: "18:00", fin: "20:00", zona: "-06:00" } as const;
+export const HORARIO = { inicio: "17:30", fin: "18:30", zona: "-06:00" } as const;
 
-/** Fecha y hora ISO de una edición (por omisión, la de inicio). */
+/** Fecha y hora ISO del primer día (por omisión, la hora de inicio). */
 export function isoDe(e: Edicion, hora: string = HORARIO.inicio): string {
   return `${e.inicio}T${hora}:00${HORARIO.zona}`;
 }
 
+/** Fecha y hora ISO del último día (por omisión, la hora de cierre). */
+export function isoFinDe(e: Edicion, hora: string = HORARIO.fin): string {
+  return `${e.fin}T${hora}:00${HORARIO.zona}`;
+}
+
 export const EMPIEZA = {
   nombre: "Empieza aquí",
-  /* Ya no dice "Claude para contadores": se confundía con el curso de 8 horas
-     (Israel, 2026-10-13). Las 2 horas viven en el folio y en el precio. */
-  titulo: "tu primer día con Claude",
+  titulo: "el reto de 5 días",
   /** Para el <title> y el JSON-LD, donde el nombre corto no dice nada solo */
-  nombreCompleto: "Empieza aquí: tu primer día con Claude",
+  nombreCompleto: "Empieza aquí: el reto de 5 días con Claude",
   descripcion:
-    "Taller en vivo de 2 horas para contadores que no han usado inteligencia artificial o la probaron y les contestó como blog. Sales con un proyecto de Claude configurado para tu despacho, un prompt que cita el fundamento legal y tu primer lote de XML convertido en tabla y revisado. Sin conocimientos previos.",
-  horario: `${HORARIO.inicio} a ${HORARIO.fin}, hora del centro de México`,
-  duracion: "2 horas en vivo",
-  sede: "Por Zoom, con grabación disponible 30 días",
+    "Reto en vivo de 5 días, una hora diaria, para contadores que quieren pasar de probar la inteligencia artificial a trabajar con ella. Cada día termina con algo hecho en tu pantalla: un proyecto de Claude para tu despacho, un lote de XML revisado, el ISR de sueldos como flujo repetible, un cálculo con su fundamento y tus flujos empaquetados. Sin conocimientos previos.",
+  horario: `${HORARIO.inicio} a ${HORARIO.fin}, hora del centro de México, de lunes a viernes`,
+  duracion: "5 sesiones de 1 hora en vivo",
+  sede: "Por Zoom, con grabaciones",
   cupo: 25,
   precio: PRECIO,
   moneda: MONEDA,
-  precioTexto: `$${PRECIO} ${MONEDA}`,
+  precioTexto: `$${PRECIO.toLocaleString("en-US")} ${MONEDA}`,
   /** Lo que se paga aparte, dicho de frente: es parte del precio real */
   herramienta: {
     nombre: "Claude Pro",
@@ -97,8 +97,10 @@ export const EMPIEZA = {
     costoTexto: "US$20 al mes (aprox. $400 MXN)",
     verificado: "2026-10-13",
   },
+  /* La garantía SÍ es pública (no es promoción, es confianza), pero lleva su
+     condición: haber hecho las cinco entregas. Israel la verifica; nas.com no. */
   garantia:
-    "Si cancelas hasta dos días antes de tu fecha te devuelvo el dinero completo. Si no puedes asistir en vivo, la grabación es tuya 30 días.",
+    "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 11 de diciembre.",
 } as const;
 
 /**
@@ -107,15 +109,15 @@ export const EMPIEZA = {
  * de datos está en una categoría restringida y uno personalizado no pasa.
  */
 export const PIXEL_EMPIEZA = {
-  content_name: "empieza-aqui",
+  content_name: "empieza-aqui-reto",
   content_type: "product",
-  content_ids: ["taller-empieza"],
+  content_ids: ["reto-empieza"],
   value: PRECIO,
   currency: MONEDA,
 } as const;
 
 function limiteDe(e: Edicion): Date {
-  return new Date(`${e.inicio}T23:59:59${HORARIO.zona}`);
+  return new Date(`${e.fin}T23:59:59${HORARIO.zona}`);
 }
 
 /** Las ediciones que todavía no pasan, en orden de fecha (agotadas incluidas). */
@@ -134,132 +136,179 @@ export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
 }
 
 /**
- * Video atemporal de la página (por qué tomar el taller): sin fechas ni
- * precio, para que sirva en cualquier edición. Mientras `id` sea null la
- * página NO pinta el hueco. La carátula NO es la miniatura de YouTube (esa es
- * de CTR y desentona aquí): sale de `design/piezas/caratula-empieza.html`
- * con `node design/piezas/render.mjs caratula-empieza`.
+ * Video de la página. Mientras `id` sea null no se pinta y en su lugar va la
+ * lista de lo que te llevas. El anterior (QCA6xuvNSeM, "Por qué empezar aquí")
+ * menciona "taller" y las "tres cosas" del taller de 2 horas, y contradice el
+ * reto de 5 días; Israel grabará uno nuevo (2026-11-03). Cuando esté: pegar su
+ * `id` aquí y cambiar la carátula. La carátula NO es la miniatura de YouTube:
+ * sale de `design/piezas/caratula-empieza.html` con
+ * `node design/piezas/render.mjs caratula-empieza`.
  */
 export const VIDEO_EMPIEZA: { id: string | null; titulo: string; poster: string; cinta: string } = {
-  id: "QCA6xuvNSeM",
-  titulo: "Por qué tomar el taller Empieza aquí",
+  id: null,
+  titulo: "Por qué tomar el reto Empieza aquí",
   poster: "/assets/empieza-video.jpg",
   cinta: "Por qué empezar aquí",
 };
 
-/** La promesa: con qué sales. Es el argumento entero de la página. */
-export const ENTREGABLES = [
+/**
+ * Los cinco días: la línea de tiempo de la página. `etapa` es el verbo de
+ * cómo evoluciona lo que sabes hacer (de pedir a empaquetar); `antes` y
+ * `despues` son el salto del día en una línea cada uno; `sale` es el entregable.
+ * Sin "programar": el lenguaje es flujo, script que Claude escribe y tú corres,
+ * artefacto (Avatar A, ver docs/reto-5-dias.md).
+ */
+export interface Dia {
+  dia: string;
+  fecha: string;
+  etapa: string;
+  titulo: string;
+  texto: string;
+  antes: string;
+  despues: string;
+  sale: string;
+}
+
+export const DIAS: readonly Dia[] = [
   {
-    titulo: "Un proyecto de Claude configurado para tu despacho",
+    dia: "Lunes",
+    fecha: "30 nov",
+    etapa: "Pides bien",
+    titulo: "Que te conteste como contador",
     texto:
-      "Con tus instrucciones, los regímenes que atiendes y tus formatos de entrega. Y sin un solo dato que no deba vivir ahí.",
+      "Qué es y qué no es Claude. Cómo se le pide una consulta fiscal: rol, contexto, instrucción, formato, y el renglón que le exige citar el artículo. Se crea el proyecto de tu despacho y se define qué nunca se sube a un chat.",
+    antes: "Respuestas genéricas que suenan a blog.",
+    despues: "Un proyecto tuyo y un prompt que cita el fundamento.",
+    sale: "Tu proyecto de Claude configurado y un prompt que cita el fundamento",
   },
   {
-    titulo: "Un prompt que te contesta como contador y cita el fundamento",
+    dia: "Martes",
+    fecha: "1 dic",
+    etapa: "Le das trabajo",
+    titulo: "Tu primer lote de XML, revisado",
     texto:
-      "Probado en vivo con una duda fiscal tuya. Con el renglón que le exige el artículo y que le hace decir cuando no lo tiene.",
+      "Un lote de CFDI ficticios convertido en tabla de Excel y revisado: totales, duplicados, el comprobante que no cuadra. Es la conciliación más simple que existe, y la base de todo lo que sigue.",
+    antes: "Abrir XML uno por uno.",
+    despues: "Una tabla revisada y el prompt para repetirla.",
+    sale: "Tu primer lote de XML convertido en tabla y revisado",
   },
   {
-    titulo: "Tu primera tarea operativa resuelta",
+    dia: "Miércoles",
+    fecha: "2 dic",
+    etapa: "Lo vuelves repetible",
+    titulo: "El mismo resultado cada vez",
     texto:
-      "Un lote de XML convertido en tabla y revisado: totales, duplicados, el CFDI que no cuadra. Con datos ficticios que te llevas para practicar.",
+      "Si le pides un cálculo dos veces, no siempre contesta igual. Aquí dejas de pedirle que calcule y le pides que escriba el script que calcula: el ISR de sueldos de una nómina. Lo corres tú, da el mismo resultado, y si cambias un dato te dice en qué renglón se movió.",
+    antes: "Un cálculo distinto cada vez que lo pides.",
+    despues: "Un script que corres tú y da la misma huella.",
+    sale: "El ISR de sueldos como flujo que corres cuando quieras",
+  },
+  {
+    dia: "Jueves",
+    fecha: "3 dic",
+    etapa: "Lo fundamentas",
+    titulo: "Tu cálculo, con el artículo en cada renglón",
+    texto:
+      "Eliges un cálculo que sí te toca (cuotas, ajuste anual, el que sea) y lo construyes con su sustento. Se instala leyes-mx, la base abierta de leyes y reglamentos que Claude consulta en tu computadora, y cada renglón cita ley, artículo y vigencia.",
+    antes: "Un cálculo que hay que defender de memoria.",
+    despues: "Un cálculo que se defiende solo, con su artículo.",
+    sale: "Tu propio cálculo, con el artículo que lo sustenta en cada renglón",
+  },
+  {
+    dia: "Viernes",
+    fecha: "4 dic",
+    etapa: "Lo empaquetas",
+    titulo: "Tus flujos se quedan contigo",
+    texto:
+      "Lo que armaste en la semana se guarda en skills que se quedan en tu cuenta. Y se hace algo muy puntual de tu despacho como artefacto o app de una sola página en HTML. Cierre del reto y qué sigue.",
+    antes: "Cuatro cosas sueltas en cuatro chats.",
+    despues: "Un kit de flujos que usas el lunes siguiente.",
+    sale: "Tus flujos empaquetados en skills que se quedan en tu cuenta",
   },
 ] as const;
 
-/** A quién le habla. Tres perfiles, los tres salieron de la encuesta. */
+/** A quién le habla. Tres perfiles. */
 export const PARA_QUIEN = [
   {
-    titulo: "No la has usado",
+    titulo: "Nunca la has abierto",
     texto:
-      "Te da desconfianza o sientes que no tienes tiempo de aprenderla. Aquí no hay nada que saber antes: empezamos en cero.",
+      "Te da desconfianza o sientes que no tienes tiempo. No hace falta saber nada antes: el lunes empezamos desde cero y todo se hace contigo al lado.",
   },
   {
-    titulo: "Probaste ChatGPT y te contestó como blog",
+    titulo: "La usas, pero cada respuesta sale distinta",
     texto:
-      "Respuestas genéricas que no sirven para un caso real. No es la herramienta: es cómo se le pide. Eso se arregla en el primer bloque.",
+      "Le preguntas y a veces acierta y a veces no. El miércoles y el jueves son para ti: cómo hacer que el resultado sea repetible y que cite su fundamento.",
   },
   {
-    titulo: "Leíste el libro y no te has atrevido",
+    titulo: "Tienes un problema puntual de tu despacho",
     texto:
-      "Ya entiendes qué es y qué no. Te falta sentarte a hacerlo con alguien al lado. Eso es este taller.",
+      "Una conciliación, un cálculo, un reporte que repites cada mes. En cinco días lo conviertes en un flujo tuyo, con datos ficticios para practicar.",
   },
 ] as const;
 
-export const BLOQUES = [
-  {
-    titulo: "Qué es y qué no",
-    texto:
-      "Predice, no piensa. Por qué resume una novela entera y no sabe que tu cliente es RESICO. Por qué contesta como blog.",
-    sale: "La expectativa correcta",
-  },
-  {
-    titulo: "Cómo se le pide",
-    texto:
-      "La misma consulta fiscal, mal y bien: rol, contexto, instrucción, formato. Se agrega el renglón que exige el fundamento. Cada quien lo prueba con una duda propia.",
-    sale: "Tu primer prompt que cita artículo",
-  },
-  {
-    titulo: "Tu proyecto",
-    texto:
-      "Se crea el proyecto de Claude del despacho. Qué se guarda ahí y qué nunca: los tres niveles, del chat público al canal controlado.",
-    sale: "El proyecto configurado",
-  },
-  {
-    titulo: "La primera tarea",
-    texto:
-      "Lote de XML ficticios, tabla en Excel, revisión. Es la conciliación más simple que existe, y es la que Daniel hoy hace en minutos.",
-    sale: "La tarea hecha y el prompt para repetirla",
-  },
-  {
-    titulo: "Qué sigue",
-    texto:
-      "Qué puedes hacer con esto la semana que entra y cómo seguir si quieres ir más a fondo.",
-    sale: "El mapa",
-  },
-] as const;
+/** Lo que sí y lo que no se hace: el alcance dicho de frente. */
+export const ALCANCE = {
+  si: "Programas internos para algo muy puntual: un script que Claude escribe y tú corres, un artefacto o una app web de una sola página en HTML.",
+  no: "Una plataforma completa, con servidor, base de datos y usuarios. Eso pide otra sesión, más intensa y a más profundidad.",
+} as const;
 
 export const INCLUYE = [
-  "Las 2 horas en vivo por Zoom, en grupo de 25",
-  "La grabación, disponible 30 días",
-  "El lote de XML ficticios y los prompts del taller, para repetirlo en casa",
+  "Las 5 sesiones en vivo por Zoom, en grupo de 25",
+  "Las grabaciones, para repasar",
+  "Los scripts, las skills y los prompts del reto, y los datos ficticios para practicar",
+  "Un grupo de WhatsApp para resolver dudas durante el reto y 30 días después",
   "La lista de verificación de qué nunca se sube a un chat",
-  "La guía de 5 prompts para auditar XML con Claude",
 ] as const;
 
 export const FAQ_EMPIEZA = [
   {
     pregunta: "¿Necesito saber algo de IA o de programación?",
     respuesta:
-      "No. Cero. El taller empieza en qué es y qué no es la inteligencia artificial, y en dos horas no se escribe una sola línea de código. Está pensado para quien no la ha usado o la probó y se decepcionó.",
+      "No. El lunes empezamos desde cero: qué es y qué no es la inteligencia artificial y cómo se le pide. Los scripts los escribe Claude; tú los corres y los entiendes. No es un curso de programación.",
+  },
+  {
+    pregunta: "¿Es un curso para crear aplicaciones?",
+    respuesta:
+      "Hasta cierto punto. Hacemos programas internos para algo muy puntual: un script, un artefacto o una app web de una sola página en HTML que resuelve un problema específico de tu despacho. Lo que no hacemos es una plataforma completa, con servidor, base de datos y usuarios. Eso pide otra sesión, más intensa y a más profundidad.",
   },
   {
     pregunta: "¿Sirve si uso ChatGPT?",
     respuesta:
-      "El taller es de Claude y solo de Claude, a propósito. En dos horas con gente que empieza, dos herramientas son caos, y el proyecto que configuramos es una función concreta de Claude. Lo que aprendas en el taller es lo que vas a usar el lunes.",
+      "El reto es de Claude y solo de Claude, a propósito. Con una sola herramienta se llega más lejos en cinco días, y los proyectos, scripts y skills que armamos son funciones concretas de Claude.",
   },
   {
     pregunta: "¿Necesito Claude Pro?",
     respuesta:
-      "No es obligatorio, pero te lo recomiendo. El plan gratuito tiene un límite de uso que se agota en una sesión intensa, y que te salga 'alcanzaste tu límite' a mitad del bloque de XML te deja sin terminar la práctica. Cuesta US$20 al mes (aprox. $400 MXN) y puedes cancelarla antes de que se renueve. Si no la tienes, en el correo de confirmación te digo cómo sacarla en cinco minutos.",
+      "Sí, es necesaria. Lo que vemos en el reto (scripts, skills, lotes de XML) consume bastantes más tokens que un chat normal, y el plan gratuito se agota a media práctica. No queremos que te quedes limitado y no puedas seguir la clase. Cuesta US$20 al mes (aprox. $400 MXN), se paga aparte y puedes cancelarla antes de que se renueve.",
   },
   {
-    pregunta: "¿Qué pasa si no puedo en vivo?",
+    pregunta: "¿A qué hora son las sesiones?",
     respuesta:
-      "La grabación es tuya 30 días. Pero el taller está hecho para hacerlo en vivo: cada bloque termina con algo hecho en tu pantalla, y en vivo puedes atorarte y preguntar. Si sabes que no vas a poder, mejor espera la siguiente fecha: el cupo es de 25 y cuando una fecha se llena se abre otra.",
+      "De lunes a viernes de 17:30 a 18:30, hora del centro de México. Dura una hora; el resto de la tarde queda libre para que lo apliques el mismo día.",
   },
   {
-    pregunta: "¿Esto es el curso Claude para Contadores?",
+    pregunta: "¿Qué pasa si falto un día?",
     respuesta:
-      "No: es el escalón anterior. Claude para Contadores son 8 horas en Fiscalistas.AI para ir a fondo, con Claude Code y Excel. Si sientes que ese todavía no es para ti, este taller es el paso de antes. Si ya usas proyectos de Claude, sáltate este y ve directo al curso.",
+      "Tienes la grabación. Pero cada día se apoya en el anterior y termina con algo hecho en tu pantalla, así que conviene no saltarse ninguno. Si ya sabes que vas a faltar a varios, mejor espera la siguiente edición.",
+  },
+  {
+    pregunta: "¿Y si no me convence?",
+    respuesta:
+      "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 11 de diciembre. La condición de haber hecho las entregas es para que la devolución sea de quien lo intentó de verdad.",
   },
   {
     pregunta: "¿Por qué solo 25 lugares?",
     respuesta:
-      "Porque en dos horas con gente que empieza en cero, cada bloque termina con algo hecho en la pantalla de cada quien, y con más gente eso se vuelve conferencia. El cupo no se sube: cuando una fecha se llena, se abre la siguiente.",
+      "Porque cada día termina con algo hecho en la pantalla de cada quien, y con más gente eso se vuelve conferencia. El cupo no se sube: si se llena, se abre otra edición.",
   },
   {
-    pregunta: "¿Cuánto cuesta el taller?",
+    pregunta: "¿Cuánto cuesta?",
     respuesta:
-      `${EMPIEZA.precioTexto}, pago único. Te recomiendo además una suscripción a Claude Pro (US$20 al mes, aprox. $400 MXN, se paga aparte). Si cancelas el taller hasta dos días antes de tu fecha te devuelvo el dinero completo.`,
+      `${EMPIEZA.precioTexto}, pago único. Necesitas además una suscripción a Claude Pro (US$20 al mes, aprox. $400 MXN, se paga aparte). ${EMPIEZA.garantia}`,
+  },
+  {
+    pregunta: "¿Esto es el curso Claude para Contadores?",
+    respuesta:
+      "No: es el escalón anterior. Claude para Contadores son 8 horas en Fiscalistas.AI para ir a fondo, con Claude Code y Excel. Si ya usas proyectos de Claude y quieres ir más lejos, ve directo al curso.",
   },
 ] as const;
