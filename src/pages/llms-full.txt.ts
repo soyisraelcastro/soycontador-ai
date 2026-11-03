@@ -85,7 +85,7 @@ ${HERRAMIENTAS.map((h) => `### ${h.nombre} (${h.estado})\n\n${h.descripcion}\n\n
 ${EMPIEZA.descripcion}
 
 Fechas: ${edicionesVigentes().map((e) => e.fechaTexto + (e.agotado ? " (agotado)" : "")).join("; ") || "próxima por anunciar"}. ${EMPIEZA.horario}. ${EMPIEZA.sede}. Cupo: ${EMPIEZA.cupo} por edición; si se llena se abre otra.
-Precio: ${EMPIEZA.precioTexto}, pago único. Requiere una suscripción a ${EMPIEZA.herramienta.nombre} (${EMPIEZA.herramienta.costoTexto}, se paga aparte y se puede cancelar): las prácticas consumen más tokens de los que alcanza el plan gratuito. ${EMPIEZA.garantia}
+Precio: ${EMPIEZA.precioTexto}, pago único. Requiere una suscripción a ${EMPIEZA.herramienta.nombre}, que cuesta ${EMPIEZA.herramienta.costoTexto}, se paga aparte y se puede cancelar: las prácticas consumen más tokens de los que alcanza el plan gratuito. ${EMPIEZA.garantia}
 Es el paso anterior al curso Claude para Contadores (Fiscalistas.AI).
 
 Los cinco días:
