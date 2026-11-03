@@ -10,7 +10,7 @@ import type { APIRoute } from "astro";
 
 import { CASO_AUDITOR, EMPRESARIAL, ORGANIZACIONES, TALLER } from "../lib/capacitacion";
 import { APENDICES, COMPRA, EDICION, FAQ_EBOOK, PARTES } from "../lib/ebook";
-import { BLOQUES, EMPIEZA, ENTREGABLES, FAQ_EMPIEZA, INCLUYE, edicionesVigentes } from "../lib/empieza";
+import { ALCANCE, DIAS, EMPIEZA, FAQ_EMPIEZA, INCLUYE, edicionesVigentes } from "../lib/empieza";
 import { FAQ_CAPACITACION, FAQ_CLUB, FAQ_HOME, FAQ_SOLUCIONES } from "../lib/faqs";
 import { HERRAMIENTAS } from "../lib/herramientas";
 import { CLUB, EBOOK, PERSONA, PROGRAMA, SITE } from "../lib/site";
@@ -80,19 +80,18 @@ ${CASO_GASOLINERA.detalle}
 
 ${HERRAMIENTAS.map((h) => `### ${h.nombre} (${h.estado})\n\n${h.descripcion}\n\nURL: ${h.url}`).join("\n\n")}
 
-## Taller "${EMPIEZA.nombreCompleto}" (https://soycontador.ai/empieza)
+## Reto "${EMPIEZA.nombreCompleto}" (https://soycontador.ai/empieza)
 
 ${EMPIEZA.descripcion}
 
-Fechas: ${edicionesVigentes().map((e) => e.fechaTexto + (e.agotado ? " (agotado)" : "")).join("; ") || "próxima por anunciar"}. ${EMPIEZA.horario}. ${EMPIEZA.sede}. Cupo: ${EMPIEZA.cupo} por fecha; cuando una se llena se abre la siguiente.
-Precio: ${EMPIEZA.precioTexto}, pago único. Se recomienda una suscripción a ${EMPIEZA.herramienta.nombre} (${EMPIEZA.herramienta.costoTexto}, se paga aparte y se puede cancelar); no es obligatoria. ${EMPIEZA.garantia}
+Fechas: ${edicionesVigentes().map((e) => e.fechaTexto + (e.agotado ? " (agotado)" : "")).join("; ") || "próxima por anunciar"}. ${EMPIEZA.horario}. ${EMPIEZA.sede}. Cupo: ${EMPIEZA.cupo} por edición; si se llena se abre otra.
+Precio: ${EMPIEZA.precioTexto}, pago único. Requiere una suscripción a ${EMPIEZA.herramienta.nombre} (${EMPIEZA.herramienta.costoTexto}, se paga aparte y se puede cancelar): las prácticas consumen más tokens de los que alcanza el plan gratuito. ${EMPIEZA.garantia}
 Es el paso anterior al curso Claude para Contadores (Fiscalistas.AI).
 
-Con qué sales:
-${ENTREGABLES.map((e) => `- ${e.titulo}: ${e.texto}`).join("\n")}
+Los cinco días:
+${DIAS.map((d) => `- ${d.dia} ${d.fecha} (${d.etapa}): ${d.titulo}. ${d.texto} Sales con: ${d.sale}.`).join("\n")}
 
-Las dos horas:
-${BLOQUES.map((b) => `- ${b.titulo}: ${b.texto} Sales con: ${b.sale}.`).join("\n")}
+Alcance: ${ALCANCE.si} No incluye: ${ALCANCE.no}
 
 Incluye:
 ${INCLUYE.map((i) => `- ${i}`).join("\n")}

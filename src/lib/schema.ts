@@ -4,7 +4,7 @@
  */
 
 import { APENDICES, COMPRA, EDICION, PARTES } from "./ebook";
-import { EDICIONES, EMPIEZA, HORARIO, isoDe } from "./empieza";
+import { EDICIONES, EMPIEZA, isoDe, isoFinDe } from "./empieza";
 import { CLUB, EBOOK, PERSONA, PROGRAMA, SITE, TRAILER } from "./site";
 import type { FaqItem } from "./faqs";
 import type { Testimonio } from "./testimonios";
@@ -191,7 +191,7 @@ export function ebookBook(): JsonLdObject {
 export function empiezaCourse(): JsonLdObject {
   return {
     "@type": "Course",
-    "@id": `${SITE.url}/empieza#taller`,
+    "@id": `${SITE.url}/empieza#reto`,
     name: EMPIEZA.nombreCompleto,
     description: EMPIEZA.descripcion,
     url: `${SITE.url}/empieza`,
@@ -205,13 +205,16 @@ export function empiezaCourse(): JsonLdObject {
       "Cómo configurar un proyecto de Claude para un despacho contable",
       "Qué datos de clientes nunca se suben a un chat de IA",
       "Cómo convertir un lote de XML (CFDI) en una tabla revisada",
+      "Cómo pedirle a Claude un script que dé el mismo resultado cada vez, como el ISR de sueldos",
+      "Cómo fundamentar un cálculo con el artículo de la ley en cada renglón",
+      "Cómo empaquetar un flujo de trabajo en una skill de Claude",
     ],
     hasCourseInstance: EDICIONES.map((e) => ({
       "@type": "CourseInstance",
       courseMode: "Online",
-      courseWorkload: "PT2H",
+      courseWorkload: "PT5H",
       startDate: isoDe(e),
-      endDate: isoDe(e, HORARIO.fin),
+      endDate: isoFinDe(e),
       location: { "@type": "VirtualLocation", url: `${SITE.url}/empieza` },
       maximumAttendeeCapacity: EMPIEZA.cupo,
     })),
@@ -221,7 +224,7 @@ export function empiezaCourse(): JsonLdObject {
       price: EMPIEZA.precio,
       priceCurrency: EMPIEZA.moneda,
       availability: "https://schema.org/InStock",
-      validThrough: isoDe(EDICIONES[EDICIONES.length - 1]),
+      validThrough: isoFinDe(EDICIONES[EDICIONES.length - 1]),
       url: `${SITE.url}/empieza`,
     },
   };

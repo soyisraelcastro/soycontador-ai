@@ -180,7 +180,7 @@ export const CTA_DIAGNOSTICO: Enlace = { label: "Agenda un diagnóstico", href: 
 export const NAV_PAGINAS = [
   { label: "Sobre mí", href: "/sobre-mi" },
   { label: "Capacitación", href: "/capacitacion" },
-  { label: "Taller: Empieza aquí", href: "/empieza" },
+  { label: "Reto: Empieza aquí", href: "/empieza" },
   { label: "Capacitación para despachos", href: "/despachos" },
   { label: "Soluciones a la medida", href: "/soluciones" },
   { label: "Herramientas", href: "/herramientas" },
