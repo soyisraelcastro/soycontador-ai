@@ -51,10 +51,11 @@ export const EDICIONES: readonly Edicion[] = [
     inicio: "2026-11-30",
     fin: "2026-12-04",
     fechaTexto: "Del 30 de noviembre al 4 de diciembre",
-    /* Pegar aquí el checkout de nas.com cuando exista el evento. Mientras sea
-       null la página no muestra botón de compra (dice que el registro abre en
-       unos días). */
-    checkout: null,
+    /* Checkout del reto en nas.com (2026-11-05). Si algún día vuelve a ser
+       null, la página deja de mostrar el botón de compra y dice que el registro
+       abre en unos días. */
+    checkout:
+      "https://nas.com/checkout-global?communityId=67ab5a14d444670df4027cad&communityCode=TODOCONTA_CLUB&requestor=whatsappSignup&linkClicked=https%3A%2F%2Fnas.com%2Fportal%2Fchallenges%2Fmanage%3Fid%3D6aea5be5e7f19ed57c633c2e&sourceInfoType=challenge&sourceInfoOrigin=6aea5be5e7f19ed57c633c2e",
   },
 ];
 
