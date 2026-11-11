@@ -64,8 +64,8 @@ const CTA: Enlace = urlAbierta
 ---
 
 <BaseLayout
-  title={`${EMPIEZA.nombreCompleto}. Cinco días, una hora diaria`}
-  description={`Reto en vivo de 5 días, de lunes a viernes, ${fechaFolio.toLowerCase()}: pasas de probar la IA a trabajar con ella. Cada día termina con algo hecho en tu pantalla. Sin conocimientos previos. ${EMPIEZA.precioTexto}.`}
+  title={`${EMPIEZA.nombreCompleto}. Clase grabada y Zoom diario`}
+  description={`Reto de 5 días, ${fechaFolio.toLowerCase()}: clase grabada a las ${HORARIO.clase} y sesión por Zoom de ${HORARIO.inicio} a ${HORARIO.fin}. Pasas de probar la IA a trabajar con ella, con algo hecho cada día. Sin conocimientos previos. ${EMPIEZA.precioTexto}.`}
   jsonLd={jsonLd}
   nav={NAV}
   cta={CTA}
@@ -75,14 +75,18 @@ const CTA: Enlace = urlAbierta
     día. `data-pausa` es el ritmo de lectura: una hoja alta se queda fija 30%
     de la ventana con su final a la vista antes de que la siguiente la tape.
     Desde el 2026-11-03 la página vende el reto de 5 días; la línea de tiempo
-    (#la-semana) reemplaza a "las dos horas" del taller.
+    (#la-semana) reemplaza a "las dos horas" del taller. Desde el 2026-11-11
+    (Israel) el formato es clase grabada a las 9:00 + sesión por Zoom de media
+    hora por la tarde: "en vivo" ya no se dice de las clases (el folio dice
+    RETO, sin "en vivo") y la hora de la tarde es la de la sesión, no la de
+    la clase.
   */}
   <main data-pausa="0.3">
     <div class="mundo" data-mundo="dia">
       <section class="hero">
         <div class="container-default hero-grid">
           <div>
-            <p class="folio">RETO EN VIVO · <b>{fechaFolio.toUpperCase()}</b> · {HORARIO.inicio} · 5 DÍAS</p>
+            <p class="folio">RETO DE 5 DÍAS · <b>{fechaFolio.toUpperCase()}</b> · CLASE {HORARIO.clase} + ZOOM {HORARIO.inicio}</p>
             <h1 class="titulo-xl">{EMPIEZA.nombre}: <span class="hl">{EMPIEZA.titulo}</span></h1>
             <p class="hero-headline">Cada día termina con algo hecho en tu pantalla.</p>
             {/*
@@ -92,7 +96,7 @@ const CTA: Enlace = urlAbierta
             */}
             <p class="hero-gancho">
               ¿La usas como buscador y cada respuesta sale distinta?{" "}
-              <span class="tenue">En cinco días, una hora diaria, la conviertes en flujos de trabajo que repites tú, con el fundamento a la vista.</span>
+              <span class="tenue">En cinco días, con una clase grabada al día y media hora por Zoom por la tarde, la conviertes en flujos de trabajo que repites tú, con el fundamento a la vista.</span>
             </p>
             <div class="hero-precio">
               <p class="precio">
@@ -178,10 +182,16 @@ const CTA: Enlace = urlAbierta
         <div class="container-default">
           <div class="sec-head"><h2 class="folio">LA SEMANA, <b>DÍA POR DÍA</b></h2></div>
           <p class="intro-bloques" data-reveal>
-            Cada día se apoya en el anterior: pides bien, das trabajo, lo
-            vuelves repetible, lo fundamentas y lo empaquetas. Una hora diaria,
-            de {HORARIO.inicio} a {HORARIO.fin}, hora del centro. Los datos son
-            ficticios y te los llevas.
+            Cada día se apoya en el anterior: pides con reglas, das tus
+            archivos, lo vuelves repetible, lo fundamentas y lo conviertes en
+            operación. A las {HORARIO.clase} se libera la clase grabada; por la
+            tarde, de {HORARIO.inicio} a {HORARIO.fin} (hora del centro), una
+            sesión por Zoom para dudas y práctica sobre tu caso, sin teoría
+            nueva. Toda la semana corre sobre un mismo despacho ficticio, con
+            tres clientes (una persona física en RESICO, una nómina y una
+            persona moral), así que nadie parte de cero. El miércoles y el
+            jueves, además, trabajas con un problema tuyo, sin datos de tus
+            clientes. Los datos ficticios te los llevas.
           </p>
 
           {/* El avance: cinco etapas que se van encendiendo conforme bajas.
@@ -206,7 +216,7 @@ const CTA: Enlace = urlAbierta
               <li class="dia" id={`dia-${i + 1}`} data-dia>
                 <span class="dia-nodo" aria-hidden="true"></span>
                 <article class="dia-card">
-                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b> · {HORARIO.inicio} A {HORARIO.fin}</p>
+                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b> · CLASE {HORARIO.clase} · ZOOM {HORARIO.inicio} A {HORARIO.fin}</p>
                   <h3>{d.titulo}</h3>
                   <p class="dia-texto">{d.texto}</p>
                   <div class="salto">
@@ -244,12 +254,12 @@ const CTA: Enlace = urlAbierta
               Cuesta {EMPIEZA.herramienta.costoTexto}. Lo que vemos en el reto
               (scripts, skills, lotes de XML) consume bastantes más tokens que
               un chat normal, y con el plan gratuito te quedarías limitado a
-              media clase. Se paga aparte; si después del reto no te sirve, la
+              media práctica. Se paga aparte; si después del reto no te sirve, la
               cancelas antes de que se renueve.
               <span class="nota-fecha">Precio en claude.com/pricing, verificado el {EMPIEZA.herramienta.verificado}.</span>
             </p>
-            <p><b>Computadora, no celular.</b> Se trabaja en vivo, con archivos.</p>
-            <p><b>Una hora diaria, a las {HORARIO.inicio}.</b> De lunes a viernes. Si falta un día tienes la grabación.</p>
+            <p><b>Computadora, no celular.</b> Se trabaja con archivos.</p>
+            <p><b>Clase grabada a las {HORARIO.clase} y media hora por Zoom, a las {HORARIO.inicio}.</b> De lunes a viernes. Si falta un día, la clase te espera grabada y la sesión de la tarde no enseña nada nuevo.</p>
             <p><b>Nada más.</b> Ni programación, ni IA, ni haber leído nada. Cero.</p>
           </div>
         </div>
