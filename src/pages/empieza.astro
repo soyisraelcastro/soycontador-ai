@@ -18,12 +18,14 @@ import {
   edicionAbierta,
   edicionesVigentes,
 } from "../lib/empieza";
-import { breadcrumbs, empiezaCourse, faqPage, graph } from "../lib/schema";
+import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
 import { SITE, type Enlace } from "../lib/site";
 import { TESTIMONIOS } from "../lib/testimonios";
 
+const video = empiezaVideo();
 const jsonLd = graph(
   empiezaCourse(),
+  ...(video ? [video] : []),
   faqPage(FAQ_EMPIEZA, `${SITE.url}/empieza`),
   breadcrumbs([
     { name: "Inicio", path: "/" },

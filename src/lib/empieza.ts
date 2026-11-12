@@ -152,14 +152,29 @@ export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
  * que hablaba del taller de 2 horas. Mientras `id` sea null no se pinta y en su
  * lugar va la lista de lo que te llevas. La carátula NO es la miniatura de
  * YouTube: sale de `design/piezas/caratula-empieza.html` con
- * `node design/piezas/render.mjs caratula-empieza`; su "No fue la herramienta."
- * es el giro de este video también, así que se queda.
+ * `node design/piezas/render.mjs caratula-empieza`: la objeción y el giro son
+ * palabras de este video ("te contestó de manera genérica", "No fue la herramienta").
  */
-export const VIDEO_EMPIEZA: { id: string | null; titulo: string; poster: string; cinta: string } = {
+export const VIDEO_EMPIEZA: {
+  id: string | null;
+  titulo: string;
+  poster: string;
+  cinta: string;
+  descripcion: string;
+  duracionISO: string;
+  fechaPublicacion: string;
+  /** Lo que se DICE en el video, para el VideoObject y llms-full.txt (transcripción del corte publicado) */
+  transcripcion: string;
+} = {
   id: "GbCj4TaRtKg",
-  titulo: "Empieza aquí: el reto de 5 días con Claude",   // el mismo nombre que nas.com y que RETO.nombreCompleto (Israel, 2026-11-11)
+  titulo: "Empieza aquí: el reto de 5 días con Claude", // el mismo nombre que nas.com y que EMPIEZA.nombreCompleto (Israel, 2026-11-11)
   poster: "/assets/empieza-video.jpg",
   cinta: "Por qué empezar aquí",
+  descripcion:
+    "Israel Castro muestra por qué la IA contesta algo genérico y cómo cambia la respuesta cuando se le pide con rol, contexto, instrucción, formato y la exigencia de citar el artículo. Luego explica el reto de cinco días: una clase cada mañana, una sesión por Zoom ese mismo día y algo hecho al terminar cada día.",
+  duracionISO: "PT2M25S",
+  fechaPublicacion: "2026-11-11",
+  transcripcion: "¿Probaste la inteligencia artificial y te contestó de manera genérica como si hubiese obtenido la respuesta del primer resultado de búsqueda y no te sirvió para un caso real? De ahí concluiste que todavía no estaba al nivel profesional que necesitas. Pues déjame decirte algo: no fue la herramienta en sí, el tipo de respuesta tiene que ver más en la forma en la que se lo pides. Y tú, con años de oficio, tienes exactamente lo que ella no tiene: criterio y años de experiencia. Solo falta pedírselo de la manera correcta. Mira, esta es la forma en la que lo hacemos casi todos cuando vamos empezando: ¿A mi cliente RESICO le tienen que retener impuestos sobre la renta? De entrada buscó en la web y dice: sí, pero solo si le paga una persona moral. Depende de quién le pague y de qué régimen tenga tu cliente. Y te da una respuesta bastante genérica con el riesgo de que no sea real. Ahora fíjate en esta forma de pedirle a la inteligencia artificial. Es la misma duda pero tiene mejor estructura. Tiene rol, contexto, instrucciones, así como el formato. Y viene con una línea que le exige citar el artículo. Misma herramienta, respuesta completamente diferente. Ahora te dice en qué se basa y si no lo sabe te lo dice. Por esa razón es que lancé este reto. Son cinco días de lunes a viernes donde cada mañana vas a tener acceso a una clase y la ves a la mejor hora que te acomode. Eso sí, te pido una cosa: que la veas antes de nuestra sesión por Zoom de ese mismo día para resolver dudas y ver cómo te fue. Cada día terminas con algo hecho en tu pantalla. El lunes empezamos con tu proyecto en Claude y una forma de revisar lo que te responde antes de aceptar eso como válido y de firmarlo. Para el martes vamos a trabajar con un lote de XML, vamos a revisarlo y vamos a conciliarlo con tu estado de cuenta. El miércoles vamos a trabajar con cálculo de impuestos donde vamos a obtener el mismo resultado cada vez y no vamos a dejar que la inteligencia artificial busque la manera de resolverlo cada vez. Para el jueves ese mismo cálculo deberá venir con el artículo citado, si no, no vale. Y el día viernes vamos a cerrar empaquetando todo esto que hemos estado trabajando para que puedas aplicarlo directamente en tu despacho el siguiente lunes. Además, te llevas el kit completo: prompts, skills, scripts y datos para poder practicar. No necesitas saber programar ni haber utilizado inteligencia artificial antes. Todos empezamos desde cero. Si quieres dejar de ser espectador y empezar a trabajar de manera profesional con Claude, aquí mismo puedes apartar tu lugar.",
 };
 
 /**

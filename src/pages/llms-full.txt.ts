@@ -10,7 +10,7 @@ import type { APIRoute } from "astro";
 
 import { CASO_AUDITOR, EMPRESARIAL, ORGANIZACIONES, TALLER } from "../lib/capacitacion";
 import { APENDICES, COMPRA, EDICION, FAQ_EBOOK, PARTES } from "../lib/ebook";
-import { ALCANCE, DIAS, EMPIEZA, FAQ_EMPIEZA, INCLUYE, edicionesVigentes } from "../lib/empieza";
+import { ALCANCE, DIAS, EMPIEZA, FAQ_EMPIEZA, INCLUYE, VIDEO_EMPIEZA, edicionesVigentes } from "../lib/empieza";
 import { FAQ_CAPACITACION, FAQ_CLUB, FAQ_HOME, FAQ_SOLUCIONES } from "../lib/faqs";
 import { HERRAMIENTAS } from "../lib/herramientas";
 import { CLUB, EBOOK, PERSONA, PROGRAMA, SITE } from "../lib/site";
@@ -83,7 +83,11 @@ ${HERRAMIENTAS.map((h) => `### ${h.nombre} (${h.estado})\n\n${h.descripcion}\n\n
 ## Reto "${EMPIEZA.nombreCompleto}" (https://soycontador.ai/empieza)
 
 ${EMPIEZA.descripcion}
+${VIDEO_EMPIEZA.id ? `
+Video de la página: "${VIDEO_EMPIEZA.titulo}" (https://www.youtube.com/watch?v=${VIDEO_EMPIEZA.id}). ${VIDEO_EMPIEZA.descripcion}
 
+Lo que dice el video: "${VIDEO_EMPIEZA.transcripcion}"
+` : ""}
 Fechas: ${edicionesVigentes().map((e) => e.fechaTexto + (e.agotado ? " (agotado)" : "")).join("; ") || "próxima por anunciar"}. Horario: ${EMPIEZA.horario}. Formato: ${EMPIEZA.sede}. Cupo: ${EMPIEZA.cupo} por edición; si se llena se abre otra.
 Precio: ${EMPIEZA.precioTexto}, pago único. Requiere una suscripción a ${EMPIEZA.herramienta.nombre}, que cuesta ${EMPIEZA.herramienta.costoTexto}, se paga aparte y se puede cancelar: las prácticas consumen más tokens de los que alcanza el plan gratuito. ${EMPIEZA.garantia}
 Es el paso anterior al curso Claude para Contadores (Fiscalistas.AI).

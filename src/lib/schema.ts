@@ -4,7 +4,7 @@
  */
 
 import { APENDICES, COMPRA, EDICION, PARTES } from "./ebook";
-import { EDICIONES, EMPIEZA, isoDe, isoFinDe } from "./empieza";
+import { EDICIONES, EMPIEZA, VIDEO_EMPIEZA, isoDe, isoFinDe } from "./empieza";
 import { CLUB, EBOOK, PERSONA, PROGRAMA, SITE, TRAILER } from "./site";
 import type { FaqItem } from "./faqs";
 import type { Testimonio } from "./testimonios";
@@ -192,6 +192,32 @@ export function ebookBook(): JsonLdObject {
  * Zoom de 17:30 a 18:00. La instancia abre con la primera clase (9:00 del
  * primer día) y cierra con la última sesión (18:00 del último día).
  */
+/**
+ * El video del hero de /empieza. Con `transcript`, como el tráiler: lo que se
+ * indexa es lo que se dice (el ejemplo del RESICO y los cinco días), no solo
+ * el título. Null si la página todavía no tiene video.
+ */
+export function empiezaVideo(): JsonLdObject | null {
+  const v = VIDEO_EMPIEZA;
+  if (!v.id) return null;
+  return {
+    "@type": "VideoObject",
+    "@id": `${SITE.url}/empieza#video`,
+    name: v.titulo,
+    description: v.descripcion,
+    thumbnailUrl: `${SITE.url}${v.poster}`,
+    uploadDate: v.fechaPublicacion,
+    duration: v.duracionISO,
+    embedUrl: `https://www.youtube.com/embed/${v.id}`,
+    contentUrl: `https://www.youtube.com/watch?v=${v.id}`,
+    transcript: v.transcripcion,
+    inLanguage: "es-MX",
+    creator: personRef(),
+    publisher: personRef(),
+    about: { "@id": `${SITE.url}/empieza#reto` },
+  };
+}
+
 export function empiezaCourse(): JsonLdObject {
   return {
     "@type": "Course",
