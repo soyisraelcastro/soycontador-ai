@@ -145,16 +145,18 @@ export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
 }
 
 /**
- * Video de la página. Mientras `id` sea null no se pinta y en su lugar va la
- * lista de lo que te llevas. El anterior (QCA6xuvNSeM, "Por qué empezar aquí")
- * menciona "taller" y las "tres cosas" del taller de 2 horas, y contradice el
- * reto de 5 días; Israel grabará uno nuevo (2026-11-03). Cuando esté: pegar su
- * `id` aquí y cambiar la carátula. La carátula NO es la miniatura de YouTube:
- * sale de `design/piezas/caratula-empieza.html` con
- * `node design/piezas/render.mjs caratula-empieza`.
+ * Video de la página: el hero del reto (GbCj4TaRtKg, 2:24, grabado y editado el
+ * 2026-11-11 en hyperframes-30-days, `edicion/2026-11-11-start-challenge-hero/`).
+ * Habla del formato nuevo (una clase cada mañana y la sesión por Zoom de la
+ * tarde) y es atemporal: sin fechas, precio ni cupo. Reemplaza a QCA6xuvNSeM,
+ * que hablaba del taller de 2 horas. Mientras `id` sea null no se pinta y en su
+ * lugar va la lista de lo que te llevas. La carátula NO es la miniatura de
+ * YouTube: sale de `design/piezas/caratula-empieza.html` con
+ * `node design/piezas/render.mjs caratula-empieza`; su "No fue la herramienta."
+ * es el giro de este video también, así que se queda.
  */
 export const VIDEO_EMPIEZA: { id: string | null; titulo: string; poster: string; cinta: string } = {
-  id: null,
+  id: "GbCj4TaRtKg",
   titulo: "Por qué tomar el reto Empieza aquí",
   poster: "/assets/empieza-video.jpg",
   cinta: "Por qué empezar aquí",
