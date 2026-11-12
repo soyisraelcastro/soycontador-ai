@@ -37,7 +37,14 @@ export default defineConfig({
     // slug o el repo de nombre, un permanente ya estaría cacheado en el
     // navegador de todo el que lo abrió y no habría cómo repuntarlo.
     '/prompts': { status: 302, destination: '/audita' },
-    '/repo': { status: 302, destination: 'https://github.com/soycontadorAI/jueves-de-contadoria' },
+    // Desde el 2026-11-12 el material de los lives se baja de un producto gratis
+    // en nas.com (un apartado por episodio): así quien lo baja queda como
+    // miembro de la comunidad. El repo de GitHub sigue ligado desde ahí.
+    '/repo': { status: 302, destination: 'https://nas.com/soycontadorai/digital-files/material-de-jueves-de-contadoria' },
+    // La comunidad en nas.com y, más adelante, la membresía de pago. 302 porque
+    // se dicta en cámara y el destino va a cambiar (una página propia con los
+    // planes, cuando existan).
+    '/comunidad': { status: 302, destination: 'https://nas.com/soycontadorai' },
     // El curso lo imparte Pepe en su plataforma; yo doy los módulos 5 y 6. El
     // alias es mío a propósito: si el curso cambia de sede, de edición o deja
     // de existir, repunto esto y los videos ya publicados siguen sirviendo.

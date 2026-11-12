@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="lienzo" content="1280x720">
+<meta name="salida" content="design/salidas/portada-material-jueves.png">
+<title>portada-material-jueves</title>
+<style>
+/* ============================================================
+   Portada del producto gratis "Material de Jueves de ContadorIA" en nas.com
+   (1280x720). `node design/piezas/render.mjs portada-material-jueves`.
+   Se sube a mano (o por el MCP de nas) como portada del producto.
+
+   Mismo gesto que la carátula de /empieza: serif, el plumón en la vuelta y el
+   retrato apoyado en el canto de abajo. Sudadera: es Avatar A (el del live).
+   Sin números de episodio: la portada no se rehace cada jueves.
+   ============================================================ */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal; font-weight: 400; font-display: block;
+  src: url("../../node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic; font-weight: 400; font-display: block;
+  src: url("../../node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal; font-weight: 500; font-display: block;
+  src: url("../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+}
+:root {
+  --bg: #FBFAF7;
+  --ink: #14161A;
+  --ink-dim: #666B75;
+  --marker: #3DD68C;
+  --line: #E3E0D8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  position: relative;
+  width: 1280px; height: 720px; overflow: hidden;
+  background: var(--bg); color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+.texto { position: absolute; left: 76px; top: 76px; z-index: 1; }
+.folio {
+  font-family: "JetBrains Mono", monospace; font-weight: 500;
+  font-size: 24px; letter-spacing: 0.02em;
+  color: var(--ink-dim);
+  padding-bottom: 18px; border-bottom: 2px solid var(--line);
+  display: inline-block;
+}
+.folio b { color: var(--ink); font-weight: 500; }
+.titulo {
+  font-family: "Instrument Serif", serif; font-weight: 400;
+  font-size: 104px; line-height: 1.02; letter-spacing: -0.02em;
+  margin-top: 40px; white-space: nowrap;
+}
+.titulo b {
+  font-weight: 400;
+  background-image: linear-gradient(to top, transparent 0.22em, var(--marker) 0.22em, var(--marker) 0.72em, transparent 0.72em);
+  background-repeat: no-repeat;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.sub {
+  font-family: "Instrument Serif", serif; font-style: italic;
+  font-size: 44px; line-height: 1.15; color: var(--ink-dim);
+  margin-top: 34px; white-space: nowrap;
+}
+.pie {
+  position: absolute; left: 76px; bottom: 64px;
+  font-family: "JetBrains Mono", monospace; font-weight: 500;
+  font-size: 22px; letter-spacing: 0.04em; color: var(--ink);
+}
+.retrato { position: absolute; right: 24px; bottom: 0; height: 640px; width: auto; display: block; }
+</style>
+</head>
+<body>
+  <div class="texto">
+    <p class="folio"><b>Jueves de ContadorIA</b> · material de los lives</p>
+    <p class="titulo">La carpeta<br>de <b>cada live.</b></p>
+    <p class="sub">El CLAUDE.md, los datos, el script y el prompt.</p>
+  </div>
+  <p class="pie">soycontador.ai/repo</p>
+  <img class="retrato" src="../../public/assets/israel-apoyado-hoodie.webp" alt="">
+</body>
+</html>
