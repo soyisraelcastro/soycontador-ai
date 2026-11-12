@@ -18,12 +18,14 @@ import {
   edicionAbierta,
   edicionesVigentes,
 } from "../lib/empieza";
-import { breadcrumbs, empiezaCourse, faqPage, graph } from "../lib/schema";
-import { SITE, type Enlace } from "../lib/site";
+import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
+import { EBOOK, SITE, type Enlace } from "../lib/site";
 import { TESTIMONIOS } from "../lib/testimonios";
 
+const video = empiezaVideo();
 const jsonLd = graph(
   empiezaCourse(),
+  ...(video ? [video] : []),
   faqPage(FAQ_EMPIEZA, `${SITE.url}/empieza`),
   breadcrumbs([
     { name: "Inicio", path: "/" },
@@ -64,8 +66,8 @@ const CTA: Enlace = urlAbierta
 ---
 
 <BaseLayout
-  title={`${EMPIEZA.nombreCompleto}. Cinco días, una hora diaria`}
-  description={`Reto en vivo de 5 días, de lunes a viernes, ${fechaFolio.toLowerCase()}: pasas de probar la IA a trabajar con ella. Cada día termina con algo hecho en tu pantalla. Sin conocimientos previos. ${EMPIEZA.precioTexto}.`}
+  title={`${EMPIEZA.nombreCompleto}. Clase grabada y Zoom diario`}
+  description={`Reto de 5 días para contadores, ${fechaFolio.toLowerCase()}: deja de usar la IA como un buscador que inventa artículos. Revisas XML, concilias bancos y calculas impuestos con el fundamento en cada renglón. Sin saber programar. ${EMPIEZA.precioTexto}.`}
   jsonLd={jsonLd}
   nav={NAV}
   cta={CTA}
@@ -75,24 +77,35 @@ const CTA: Enlace = urlAbierta
     día. `data-pausa` es el ritmo de lectura: una hoja alta se queda fija 30%
     de la ventana con su final a la vista antes de que la siguiente la tape.
     Desde el 2026-11-03 la página vende el reto de 5 días; la línea de tiempo
-    (#la-semana) reemplaza a "las dos horas" del taller.
+    (#la-semana) reemplaza a "las dos horas" del taller. Desde el 2026-11-11
+    (Israel) el formato es clase grabada a las 9:00 + sesión por Zoom de media
+    hora por la tarde: "en vivo" ya no se dice de las clases (el folio dice
+    RETO, sin "en vivo") y la hora de la tarde es la de la sesión, no la de
+    la clase.
   */}
   <main data-pausa="0.3">
     <div class="mundo" data-mundo="dia">
       <section class="hero">
         <div class="container-default hero-grid">
           <div>
-            <p class="folio">RETO EN VIVO · <b>{fechaFolio.toUpperCase()}</b> · {HORARIO.inicio} · 5 DÍAS</p>
-            <h1 class="titulo-xl">{EMPIEZA.nombre}: <span class="hl">{EMPIEZA.titulo}</span></h1>
-            <p class="hero-headline">Cada día termina con algo hecho en tu pantalla.</p>
+            {/*
+              Copy simplificado (Israel, 2026-11-11): el titular nombra el problema
+              con las palabras del video del hero ("buscó en la web… con el riesgo
+              de que no sea real"), y el folio dice para quién es. El nombre del
+              reto ("Empieza aquí: el reto de 5 días con Claude") vive en el
+              <title>, el video y el JSON-LD. El horario NO va en el hero: se dice
+              en la semana, en lo que necesitas y en el cierre.
+            */}
+            <p class="folio">RETO DE 5 DÍAS PARA CONTADORES · <b>{fechaFolio.toUpperCase()}</b></p>
+            <h1 class="titulo-xl">Deja de usar la IA como <span class="hl">un buscador que inventa artículos.</span></h1>
             {/*
               Sin mencionar el curso grande (Israel, 2026-10-13): quien llega
               sin contexto o prefiere "el otro" y no aprovecha este, o no sabe
               de qué le hablamos. La escalera se sube DESPUÉS.
             */}
             <p class="hero-gancho">
-              ¿La usas como buscador y cada respuesta sale distinta?{" "}
-              <span class="tenue">En cinco días, una hora diaria, la conviertes en flujos de trabajo que repites tú, con el fundamento a la vista.</span>
+              En cinco días construyes tus primeros flujos contables y fiscales:{" "}
+              <span class="tenue">revisas XML, concilias bancos y calculas impuestos con el fundamento legal en cada renglón. Sin saber programar.</span>
             </p>
             <div class="hero-precio">
               <p class="precio">
@@ -178,10 +191,16 @@ const CTA: Enlace = urlAbierta
         <div class="container-default">
           <div class="sec-head"><h2 class="folio">LA SEMANA, <b>DÍA POR DÍA</b></h2></div>
           <p class="intro-bloques" data-reveal>
-            Cada día se apoya en el anterior: pides bien, das trabajo, lo
-            vuelves repetible, lo fundamentas y lo empaquetas. Una hora diaria,
-            de {HORARIO.inicio} a {HORARIO.fin}, hora del centro. Los datos son
-            ficticios y te los llevas.
+            Cada día se apoya en el anterior: pides con reglas, das tus
+            archivos, lo vuelves repetible, lo fundamentas y lo conviertes en
+            operación. A las {HORARIO.clase} se libera la clase grabada; por la
+            tarde, de {HORARIO.inicio} a {HORARIO.fin} (hora del centro), una
+            sesión por Zoom para dudas y práctica sobre tu caso, sin teoría
+            nueva. Toda la semana corre sobre un mismo despacho ficticio, con
+            tres clientes (una persona física en RESICO, una nómina y una
+            persona moral), así que nadie parte de cero. El miércoles y el
+            jueves, además, trabajas con un problema tuyo, sin datos de tus
+            clientes. Los datos ficticios te los llevas.
           </p>
 
           {/* El avance: cinco etapas que se van encendiendo conforme bajas.
@@ -206,13 +225,9 @@ const CTA: Enlace = urlAbierta
               <li class="dia" id={`dia-${i + 1}`} data-dia>
                 <span class="dia-nodo" aria-hidden="true"></span>
                 <article class="dia-card">
-                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b> · {HORARIO.inicio} A {HORARIO.fin}</p>
+                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b></p>
                   <h3>{d.titulo}</h3>
                   <p class="dia-texto">{d.texto}</p>
-                  <div class="salto">
-                    <p><span class="folio">ANTES</span>{d.antes}</p>
-                    <p class="salto-despues"><span class="folio">DESPUÉS</span>{d.despues}</p>
-                  </div>
                   <p class="bloque-sale"><span class="folio">SALES CON</span> {d.sale}</p>
                 </article>
               </li>
@@ -244,12 +259,12 @@ const CTA: Enlace = urlAbierta
               Cuesta {EMPIEZA.herramienta.costoTexto}. Lo que vemos en el reto
               (scripts, skills, lotes de XML) consume bastantes más tokens que
               un chat normal, y con el plan gratuito te quedarías limitado a
-              media clase. Se paga aparte; si después del reto no te sirve, la
+              media práctica. Se paga aparte; si después del reto no te sirve, la
               cancelas antes de que se renueve.
               <span class="nota-fecha">Precio en claude.com/pricing, verificado el {EMPIEZA.herramienta.verificado}.</span>
             </p>
-            <p><b>Computadora, no celular.</b> Se trabaja en vivo, con archivos.</p>
-            <p><b>Una hora diaria, a las {HORARIO.inicio}.</b> De lunes a viernes. Si falta un día tienes la grabación.</p>
+            <p><b>Computadora, no celular.</b> Se trabaja con archivos.</p>
+            <p><b>Clase grabada a las {HORARIO.clase} y media hora por Zoom, a las {HORARIO.inicio}.</b> De lunes a viernes. Si falta un día, la clase te espera grabada y la sesión de la tarde no enseña nada nuevo.</p>
             <p><b>Nada más.</b> Ni programación, ni IA, ni haber leído nada. Cero.</p>
           </div>
         </div>
@@ -292,11 +307,46 @@ const CTA: Enlace = urlAbierta
                 desarrollador de software. Empecé capturando pólizas y peleándome
                 con el portal del SAT, igual que tú.
               </p>
+              {/*
+                El arsenal (Israel, 2026-11-11: "saquémoslo a presumir"). Solo lo que
+                está publicado y en producción, con los datos de herramientas.ts,
+                site.ts (EBOOK, PERSONA) y el README de leyes-mx. Sin cifras de
+                usuarios: no hay una fuente verificada.
+              */}
+              <p class="autor-lead">
+                No te enseño algo que leí: construyo con la IA las herramientas que
+                uso en el trabajo fiscal, y todas están en producción.
+              </p>
+              <ul class="arsenal">
+                <li>
+                  <a href="https://todoconta.com" rel="noopener">TodoConta</a>: nació en 2012 como
+                  blog y hoy es software fiscal. Descarga masiva de CFDI del SAT, constancia,
+                  opinión 32-D, listas negras y nómina, con una API que ya usan otras empresas.
+                </li>
+                <li>
+                  <a href="https://todoconta.com/mcp" rel="noopener">La conexión MCP con el SAT</a>:
+                  Claude trabaja directo con tus CFDI, sin copiar datos de clientes a un chat.
+                </li>
+                <li>
+                  <a href="https://todoconta.com/abacus" rel="noopener">Abacus</a>: un asistente
+                  fiscal por WhatsApp y Telegram.
+                </li>
+                <li>
+                  <a href="https://leyes.todoconta.com" rel="noopener">leyes-mx</a>: la LISR, la LIVA,
+                  el CFF, la LFT, la LSS y sus reglamentos, artículo por artículo, para que Claude
+                  cite la ley en lugar de inventarla. Es abierta y gratis, y la instalas el jueves del reto.
+                </li>
+                <li>
+                  <a href="/ebook">{EBOOK.titulo}</a>, mi libro: 17 capítulos para entender la IA
+                  sin código ni jerga.
+                </li>
+              </ul>
               <p>
-                Cada jueves resuelvo un problema de despacho en vivo en{" "}
-                <a href="/jueves">Jueves de ContadorIA</a>, y doy los módulos de
+                Además, desde julio de 2026 cada jueves resuelvo un problema de despacho
+                en vivo en <a href="/jueves">Jueves de ContadorIA</a>, y doy los módulos de
                 Claude Code y de Excel en {COLABORACION?.nombre ?? "Claude para Contadores"}. Este reto
-                es lo que le daría a alguien que quiere pasar de probar la IA a trabajar con ella.
+                es lo que le daría a alguien que quiere pasar de probar la IA a trabajar con ella:
+                la misma forma de trabajar con la que construyo todo esto.
               </p>
             </div>
             <img
@@ -530,15 +580,8 @@ const CTA: Enlace = urlAbierta
   .titulo-xl .hl {
     --hl-abajo: 0.22em;
   }
-  .hero-headline {
-    margin: 0.7rem 0 1.4rem;
-    font-family: var(--font-serif-detail);
-    font-style: italic;
-    font-size: clamp(1.15rem, 2vw, 1.4rem);
-    color: var(--color-ink-soft);
-  }
   .hero-gancho {
-    margin: 0;
+    margin: 1.4rem 0 0;
     font-size: 1.12rem;
     font-weight: 500;
     line-height: 1.45;
@@ -908,6 +951,32 @@ const CTA: Enlace = urlAbierta
     font-weight: 700;
     text-decoration: none;
   }
+  .autor .autor-lead {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .arsenal {
+    list-style: none;
+    margin: 0 0 1.1rem;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .arsenal li {
+    position: relative;
+    padding-left: 1.1rem;
+    color: var(--color-ink-soft);
+  }
+  .arsenal li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
 
   /* ---- Línea de tiempo del reto (#la-semana) ----
      Los estados (pendiente / activo / hecho) los pone el script con
@@ -1120,35 +1189,10 @@ const CTA: Enlace = urlAbierta
     color: var(--color-ink-soft);
     transition: color 0.5s ease;
   }
-  /* De dónde a dónde: el salto del día, en una línea cada lado. */
-  .salto {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem 1.4rem;
-    margin: 1rem 0 0.2rem;
-    padding: 0.9rem 0 0;
-    border-top: 1px dashed var(--color-line-strong);
-  }
   @media (max-width: 640px) {
-    .salto {
-      grid-template-columns: 1fr;
-    }
     .dia {
       padding-left: 2.6rem;
     }
-  }
-  .salto p {
-    margin: 0;
-    color: var(--color-ink-soft);
-    font-size: 0.93rem;
-  }
-  .salto .folio {
-    display: block;
-    margin-bottom: 0.15rem;
-  }
-  .salto-despues {
-    color: var(--color-ink);
-    font-weight: 600;
   }
   .dia-card .bloque-sale {
     margin: 0.9rem 0 0 !important;

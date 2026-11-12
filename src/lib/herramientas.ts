@@ -43,4 +43,12 @@ export const HERRAMIENTAS: Herramienta[] = [
     url: "https://todoconta.com/abacus",
     estado: "disponible",
   },
+  {
+    // Entra el 2026-11-11 (Israel: "presumir todo el arsenal"). Abierta y gratis: `npx leyes-mx instalar`.
+    nombre: "leyes-mx",
+    descripcion:
+      "Las leyes fiscales y laborales de México (LISR, LIVA, CFF, LFT, LSS y sus reglamentos, más las tarifas de ISR del Anexo 8), un archivo por artículo y versionadas por año de vigencia. Se instala gratis en tu computadora y le da a Claude, Codex o Cursor el texto de la ley para citar ley, artículo y vigencia en lugar de inventarlos. El texto sale de la Cámara de Diputados; el DOF prevalece.",
+    url: "https://leyes.todoconta.com",
+    estado: "disponible",
+  },
 ];

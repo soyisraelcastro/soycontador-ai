@@ -4,7 +4,7 @@
  */
 
 import { APENDICES, COMPRA, EDICION, PARTES } from "./ebook";
-import { EDICIONES, EMPIEZA, isoDe, isoFinDe } from "./empieza";
+import { EDICIONES, EMPIEZA, VIDEO_EMPIEZA, isoDe, isoFinDe } from "./empieza";
 import { CLUB, EBOOK, PERSONA, PROGRAMA, SITE, TRAILER } from "./site";
 import type { FaqItem } from "./faqs";
 import type { Testimonio } from "./testimonios";
@@ -187,7 +187,37 @@ export function ebookBook(): JsonLdObject {
  * Taller "Empieza aquí" como Course + CourseInstance + Offer. Aquí el precio
  * SÍ se publica: es producto de precio fijo, como el ebook, y la regla de no
  * publicar es del high ticket. `teaches` es lo que el buscador cita.
+ *
+ * Formato del 2026-11-11: cada día una clase grabada (9:00) y una sesión por
+ * Zoom de 17:30 a 18:00. La instancia abre con la primera clase (9:00 del
+ * primer día) y cierra con la última sesión (18:00 del último día).
  */
+/**
+ * El video del hero de /empieza. Con `transcript`, como el tráiler: lo que se
+ * indexa es lo que se dice (el ejemplo del RESICO y los cinco días), no solo
+ * el título. Null si la página todavía no tiene video.
+ */
+export function empiezaVideo(): JsonLdObject | null {
+  const v = VIDEO_EMPIEZA;
+  if (!v.id) return null;
+  return {
+    "@type": "VideoObject",
+    "@id": `${SITE.url}/empieza#video`,
+    name: v.titulo,
+    description: v.descripcion,
+    thumbnailUrl: `${SITE.url}${v.poster}`,
+    uploadDate: v.fechaPublicacion,
+    duration: v.duracionISO,
+    embedUrl: `https://www.youtube.com/embed/${v.id}`,
+    contentUrl: `https://www.youtube.com/watch?v=${v.id}`,
+    transcript: v.transcripcion,
+    inLanguage: "es-MX",
+    creator: personRef(),
+    publisher: personRef(),
+    about: { "@id": `${SITE.url}/empieza#reto` },
+  };
+}
+
 export function empiezaCourse(): JsonLdObject {
   return {
     "@type": "Course",
@@ -204,7 +234,8 @@ export function empiezaCourse(): JsonLdObject {
       "Cómo pedirle a Claude una consulta fiscal que cite el fundamento legal",
       "Cómo configurar un proyecto de Claude para un despacho contable",
       "Qué datos de clientes nunca se suben a un chat de IA",
-      "Cómo convertir un lote de XML (CFDI) en una tabla revisada",
+      "Cómo convertir un lote de XML (CFDI) en una tabla revisada y conciliarla contra un estado de cuenta",
+      "Cómo revisar una respuesta de IA antes de firmar: que sea segura, verificable, repetible y reutilizable",
       "Cómo pedirle a Claude un script que dé el mismo resultado cada vez, como el ISR de sueldos",
       "Cómo fundamentar un cálculo con el artículo de la ley en cada renglón",
       "Cómo empaquetar un flujo de trabajo en una skill de Claude",
@@ -212,6 +243,8 @@ export function empiezaCourse(): JsonLdObject {
     hasCourseInstance: EDICIONES.map((e) => ({
       "@type": "CourseInstance",
       courseMode: "Online",
+      /* Cinco clases de 20 a 30 minutos o más, más cinco sesiones de media hora
+         y la práctica de cada día: se declara el aproximado, no el mínimo. */
       courseWorkload: "PT5H",
       startDate: isoDe(e),
       endDate: isoFinDe(e),

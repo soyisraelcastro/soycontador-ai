@@ -2,8 +2,14 @@
  * "Empieza aquí": el reto de 5 días (30 de noviembre al 4 de diciembre de 2026).
  *
  * Desde el 2026-11-03 (decisión de Israel) esta página ya no vende el taller
- * de 2 horas ($697): vende el último taller del año convertido en reto, una
- * hora diaria por Zoom.
+ * de 2 horas ($697): vende el último taller del año convertido en reto.
+ *
+ * Formato replanteado el 2026-11-11 (Israel): cada día, una CLASE GRABADA que
+ * se libera a las 9:00 y una SESIÓN POR ZOOM de 17:30 a 18:00 (media hora, no
+ * una hora) para dudas y práctica; la tarde no enseña nada nuevo. Por eso ya
+ * no se dice "en vivo" de las clases: solo de la sesión de la tarde. Precio,
+ * cupo, fechas, garantía y Claude Pro no cambian. El detalle del formato y
+ * del kit vive en docs/reto-5-dias.md.
  *
  * Esta página publica solo el precio fijo ($1,497; regla del 2026-09-20: los
  * productos de precio fijo sí lo publican). Nada de condiciones especiales
@@ -60,19 +66,21 @@ export const EDICIONES: readonly Edicion[] = [
 ];
 
 /**
- * La hora de cada sesión, del centro de México. Esa zona no cambia de horario
- * desde 2022, así que el desfase es fijo. Una hora diaria, de lunes a viernes.
+ * Las horas de cada día, del centro de México. Esa zona no cambia de horario
+ * desde 2022, así que el desfase es fijo. `clase` es cuando se libera la clase
+ * grabada; `inicio` y `fin` son la sesión por Zoom de la tarde (media hora,
+ * 2026-11-11; antes eran 17:30 a 18:30). De lunes a viernes.
  */
-export const HORARIO = { inicio: "17:30", fin: "18:30", zona: "-06:00" } as const;
+export const HORARIO = { clase: "9:00", inicio: "17:30", fin: "18:00", zona: "-06:00" } as const;
 
-/** Fecha y hora ISO del primer día (por omisión, la hora de inicio). */
-export function isoDe(e: Edicion, hora: string = HORARIO.inicio): string {
-  return `${e.inicio}T${hora}:00${HORARIO.zona}`;
+/** Fecha y hora ISO del primer día (por omisión, cuando se libera la primera clase). */
+export function isoDe(e: Edicion, hora: string = HORARIO.clase): string {
+  return `${e.inicio}T${hora.padStart(5, "0")}:00${HORARIO.zona}`;
 }
 
-/** Fecha y hora ISO del último día (por omisión, la hora de cierre). */
+/** Fecha y hora ISO del último día (por omisión, cuando cierra la sesión de la tarde). */
 export function isoFinDe(e: Edicion, hora: string = HORARIO.fin): string {
-  return `${e.fin}T${hora}:00${HORARIO.zona}`;
+  return `${e.fin}T${hora.padStart(5, "0")}:00${HORARIO.zona}`;
 }
 
 export const EMPIEZA = {
@@ -81,10 +89,10 @@ export const EMPIEZA = {
   /** Para el <title> y el JSON-LD, donde el nombre corto no dice nada solo */
   nombreCompleto: "Empieza aquí: el reto de 5 días con Claude",
   descripcion:
-    "Reto en vivo de 5 días, una hora diaria, para contadores que quieren pasar de probar la inteligencia artificial a trabajar con ella. Cada día termina con algo hecho en tu pantalla: un proyecto de Claude para tu despacho, un lote de XML revisado, el ISR de sueldos como flujo repetible, un cálculo con su fundamento y tus flujos empaquetados. Sin conocimientos previos.",
-  horario: `${HORARIO.inicio} a ${HORARIO.fin}, hora del centro de México, de lunes a viernes`,
-  duracion: "5 sesiones de 1 hora en vivo",
-  sede: "Por Zoom, con grabaciones",
+    "Reto de 5 días para contadores que quieren pasar de probar la inteligencia artificial a trabajar con ella. Cada día te llega una clase grabada a las 9:00 y, por la tarde, de 17:30 a 18:00, hay una sesión por Zoom para dudas y práctica. Cada día termina con algo hecho en tu pantalla: un proyecto de Claude para tu despacho, un lote de XML revisado y conciliado, el ISR de sueldos como script probado, un cálculo con su fundamento y tus flujos empaquetados. Lo que armas busca ser seguro, verificable, repetible y reutilizable, y te llevas un kit para trabajar con ello. Sin conocimientos previos.",
+  horario: `clase grabada a las ${HORARIO.clase} y sesión por Zoom de ${HORARIO.inicio} a ${HORARIO.fin}, hora del centro de México, de lunes a viernes`,
+  duracion: "5 clases + 5 sesiones por Zoom",
+  sede: "Clases grabadas en línea y sesión diaria por Zoom",
   cupo: 25,
   precio: PRECIO,
   moneda: MONEDA,
@@ -137,19 +145,36 @@ export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
 }
 
 /**
- * Video de la página. Mientras `id` sea null no se pinta y en su lugar va la
- * lista de lo que te llevas. El anterior (QCA6xuvNSeM, "Por qué empezar aquí")
- * menciona "taller" y las "tres cosas" del taller de 2 horas, y contradice el
- * reto de 5 días; Israel grabará uno nuevo (2026-11-03). Cuando esté: pegar su
- * `id` aquí y cambiar la carátula. La carátula NO es la miniatura de YouTube:
- * sale de `design/piezas/caratula-empieza.html` con
- * `node design/piezas/render.mjs caratula-empieza`.
+ * Video de la página: el hero del reto (GbCj4TaRtKg, 2:24, grabado y editado el
+ * 2026-11-11 en hyperframes-30-days, `edicion/2026-11-11-start-challenge-hero/`).
+ * Habla del formato nuevo (una clase cada mañana y la sesión por Zoom de la
+ * tarde) y es atemporal: sin fechas, precio ni cupo. Reemplaza a QCA6xuvNSeM,
+ * que hablaba del taller de 2 horas. Mientras `id` sea null no se pinta y en su
+ * lugar va la lista de lo que te llevas. La carátula NO es la miniatura de
+ * YouTube: sale de `design/piezas/caratula-empieza.html` con
+ * `node design/piezas/render.mjs caratula-empieza`: la objeción y el giro son
+ * palabras de este video ("te contestó de manera genérica", "No fue la herramienta").
  */
-export const VIDEO_EMPIEZA: { id: string | null; titulo: string; poster: string; cinta: string } = {
-  id: null,
-  titulo: "Por qué tomar el reto Empieza aquí",
+export const VIDEO_EMPIEZA: {
+  id: string | null;
+  titulo: string;
+  poster: string;
+  cinta: string;
+  descripcion: string;
+  duracionISO: string;
+  fechaPublicacion: string;
+  /** Lo que se DICE en el video, para el VideoObject y llms-full.txt (transcripción del corte publicado) */
+  transcripcion: string;
+} = {
+  id: "GbCj4TaRtKg",
+  titulo: "Empieza aquí: el reto de 5 días con Claude", // el mismo nombre que nas.com y que EMPIEZA.nombreCompleto (Israel, 2026-11-11)
   poster: "/assets/empieza-video.jpg",
   cinta: "Por qué empezar aquí",
+  descripcion:
+    "Israel Castro muestra por qué la IA contesta algo genérico y cómo cambia la respuesta cuando se le pide con rol, contexto, instrucción, formato y la exigencia de citar el artículo. Luego explica el reto de cinco días: una clase cada mañana, una sesión por Zoom ese mismo día y algo hecho al terminar cada día.",
+  duracionISO: "PT2M25S",
+  fechaPublicacion: "2026-11-11",
+  transcripcion: "¿Probaste la inteligencia artificial y te contestó de manera genérica como si hubiese obtenido la respuesta del primer resultado de búsqueda y no te sirvió para un caso real? De ahí concluiste que todavía no estaba al nivel profesional que necesitas. Pues déjame decirte algo: no fue la herramienta en sí, el tipo de respuesta tiene que ver más en la forma en la que se lo pides. Y tú, con años de oficio, tienes exactamente lo que ella no tiene: criterio y años de experiencia. Solo falta pedírselo de la manera correcta. Mira, esta es la forma en la que lo hacemos casi todos cuando vamos empezando: ¿A mi cliente RESICO le tienen que retener impuestos sobre la renta? De entrada buscó en la web y dice: sí, pero solo si le paga una persona moral. Depende de quién le pague y de qué régimen tenga tu cliente. Y te da una respuesta bastante genérica con el riesgo de que no sea real. Ahora fíjate en esta forma de pedirle a la inteligencia artificial. Es la misma duda pero tiene mejor estructura. Tiene rol, contexto, instrucciones, así como el formato. Y viene con una línea que le exige citar el artículo. Misma herramienta, respuesta completamente diferente. Ahora te dice en qué se basa y si no lo sabe te lo dice. Por esa razón es que lancé este reto. Son cinco días de lunes a viernes donde cada mañana vas a tener acceso a una clase y la ves a la mejor hora que te acomode. Eso sí, te pido una cosa: que la veas antes de nuestra sesión por Zoom de ese mismo día para resolver dudas y ver cómo te fue. Cada día terminas con algo hecho en tu pantalla. El lunes empezamos con tu proyecto en Claude y una forma de revisar lo que te responde antes de aceptar eso como válido y de firmarlo. Para el martes vamos a trabajar con un lote de XML, vamos a revisarlo y vamos a conciliarlo con tu estado de cuenta. El miércoles vamos a trabajar con cálculo de impuestos donde vamos a obtener el mismo resultado cada vez y no vamos a dejar que la inteligencia artificial busque la manera de resolverlo cada vez. Para el jueves ese mismo cálculo deberá venir con el artículo citado, si no, no vale. Y el día viernes vamos a cerrar empaquetando todo esto que hemos estado trabajando para que puedas aplicarlo directamente en tu despacho el siguiente lunes. Además, te llevas el kit completo: prompts, skills, scripts y datos para poder practicar. No necesitas saber programar ni haber utilizado inteligencia artificial antes. Todos empezamos desde cero. Si quieres dejar de ser espectador y empezar a trabajar de manera profesional con Claude, aquí mismo puedes apartar tu lugar.",
 };
 
 /**
@@ -174,24 +199,24 @@ export const DIAS: readonly Dia[] = [
   {
     dia: "Lunes",
     fecha: "30 nov",
-    etapa: "Pides bien",
+    etapa: "Pides con reglas",
     titulo: "Que te conteste como contador",
     texto:
-      "Qué es y qué no es Claude. Cómo se le pide una consulta fiscal: rol, contexto, instrucción, formato, y el renglón que le exige citar el artículo. Se crea el proyecto de tu despacho y se define qué nunca se sube a un chat.",
+      "Qué es y qué no es Claude, privacidad y configuración, y los tres niveles de datos. Cómo se le pide una consulta fiscal: rol, contexto, instrucción, formato, y el renglón que le exige citar el artículo. Se crea el proyecto de tu despacho y se define qué nunca se sube a un chat.",
     antes: "Respuestas genéricas que suenan a blog.",
-    despues: "Un proyecto tuyo y un prompt que cita el fundamento.",
-    sale: "Tu proyecto de Claude configurado y un prompt que cita el fundamento",
+    despues: "Un proyecto tuyo, un prompt que cita el fundamento y un checklist para revisar.",
+    sale: "Tu proyecto de Claude configurado, la lista de qué nunca se sube y un checklist para revisar una respuesta",
   },
   {
     dia: "Martes",
     fecha: "1 dic",
-    etapa: "Le das trabajo",
-    titulo: "Tu primer lote de XML, revisado",
+    etapa: "Le das tus archivos",
+    titulo: "Tus archivos, revisados y conciliados",
     texto:
-      "Un lote de CFDI ficticios convertido en tabla de Excel y revisado: totales, duplicados, el comprobante que no cuadra. Es la conciliación más simple que existe, y la base de todo lo que sigue.",
+      "XML, Excel y PDF convertidos en tabla, y revisados: totales, duplicados, el comprobante que no cuadra. Después, la conciliación contra un estado de cuenta, el caso que Daniel cuenta más abajo. Es la base de todo lo que sigue.",
     antes: "Abrir XML uno por uno.",
-    despues: "Una tabla revisada y el prompt para repetirla.",
-    sale: "Tu primer lote de XML convertido en tabla y revisado",
+    despues: "Una tabla revisada y una conciliación que puedes repetir.",
+    sale: "Un lote de XML revisado y una conciliación contra estado de cuenta",
   },
   {
     dia: "Miércoles",
@@ -199,10 +224,10 @@ export const DIAS: readonly Dia[] = [
     etapa: "Lo vuelves repetible",
     titulo: "El mismo resultado cada vez",
     texto:
-      "Si le pides un cálculo dos veces, no siempre contesta igual. Aquí dejas de pedirle que calcule y le pides que escriba el script que calcula: el ISR de sueldos de una nómina. Lo corres tú, da el mismo resultado, y si cambias un dato te dice en qué renglón se movió.",
+      "Si le pides un cálculo dos veces, no siempre contesta igual. Aquí dejas de pedirle que calcule y le pides que escriba el script que calcula: el ISR de sueldos de una nómina. Lo corres tú, lo pruebas contra un caso de resultado conocido, da el mismo resultado y, si cambias un dato, te dice en qué renglón se movió.",
     antes: "Un cálculo distinto cada vez que lo pides.",
-    despues: "Un script que corres tú y da la misma huella.",
-    sale: "El ISR de sueldos como flujo que corres cuando quieras",
+    despues: "Un script que corres tú, probado, y da la misma huella.",
+    sale: "El ISR de sueldos como script, probado con un caso de resultado conocido",
   },
   {
     dia: "Jueves",
@@ -210,21 +235,21 @@ export const DIAS: readonly Dia[] = [
     etapa: "Lo fundamentas",
     titulo: "Tu cálculo, con el artículo en cada renglón",
     texto:
-      "Eliges un cálculo que sí te toca (cuotas, ajuste anual, el que sea) y lo construyes con su sustento. Se instala leyes-mx, la base abierta de leyes y reglamentos que Claude consulta en tu computadora, y cada renglón cita ley, artículo y vigencia.",
+      "Eliges un cálculo que sí te toca (cuotas, ajuste anual, el que sea) y lo construyes con su sustento. Se instala leyes-mx, la base abierta de leyes y reglamentos que Claude consulta en tu computadora, y cada renglón cita ley, artículo y vigencia. Si no lo encuentra, lo dice (\"no verificado\") en vez de inventarlo.",
     antes: "Un cálculo que hay que defender de memoria.",
     despues: "Un cálculo que se defiende solo, con su artículo.",
-    sale: "Tu propio cálculo, con el artículo que lo sustenta en cada renglón",
+    sale: "Tu propio cálculo, con ley, artículo y vigencia en cada renglón",
   },
   {
     dia: "Viernes",
     fecha: "4 dic",
-    etapa: "Lo empaquetas",
+    etapa: "Lo conviertes en operación",
     titulo: "Tus flujos se quedan contigo",
     texto:
-      "Lo que armaste en la semana se guarda en skills que se quedan en tu cuenta. Y se hace algo muy puntual de tu despacho como artefacto o app de una sola página en HTML. Cierre del reto y qué sigue.",
+      "Lo que armaste en la semana se guarda en skills que se quedan en tu cuenta. Y se hace algo muy puntual de tu despacho como artefacto o app de una sola página en HTML. Cómo se lo pasas a tu equipo, cierre del reto y qué sigue.",
     antes: "Cuatro cosas sueltas en cuatro chats.",
-    despues: "Un kit de flujos que usas el lunes siguiente.",
-    sale: "Tus flujos empaquetados en skills que se quedan en tu cuenta",
+    despues: "Un kit de flujos y un plan para usarlos el lunes siguiente.",
+    sale: "Tu kit empaquetado y un plan de 30 días: qué proceso contable automatizas primero",
   },
 ] as const;
 
@@ -233,7 +258,7 @@ export const PARA_QUIEN = [
   {
     titulo: "Nunca la has abierto",
     texto:
-      "Te da desconfianza o sientes que no tienes tiempo. No hace falta saber nada antes: el lunes empezamos desde cero y todo se hace contigo al lado.",
+      "Te da desconfianza o sientes que no tienes tiempo. No hace falta saber nada antes: el lunes empezamos desde cero, paso a paso, y por la tarde tienes media hora por Zoom para preguntar.",
   },
   {
     titulo: "La usas, pero cada respuesta sale distinta",
@@ -253,12 +278,18 @@ export const ALCANCE = {
   no: "Una plataforma completa, con servidor, base de datos y usuarios. Eso pide otra sesión, más intensa y a más profundidad.",
 } as const;
 
+/**
+ * Lo que se entrega. El kit se está produciendo (docs/reto-5-dias.md, "El
+ * kit"): se describe como lo que se entrega y se promete completo ANTES de que
+ * empiece el reto (2026-11-11). No se promete cuánto tiempo quedan las clases
+ * ni que las sesiones de la tarde se graben: eso sigue por decidir.
+ */
 export const INCLUYE = [
-  "Las 5 sesiones en vivo por Zoom, en grupo de 25",
-  "Las grabaciones, para repasar",
-  "Los scripts, las skills y los prompts del reto, y los datos ficticios para practicar",
-  "Un grupo de WhatsApp para resolver dudas durante el reto y 30 días después",
+  "Las 5 clases se liberan a las 9:00 de cada día y las ves cuando puedas",
+  "Las 5 sesiones por Zoom de 17:30 a 18:00, en grupo de 25, para dudas y práctica sobre tu caso",
+  "El kit completo, que recibes antes de que empiece el reto: guías de trabajo, proyecto base de Claude, biblioteca de prompts, checklist de revisión, scripts probados, skills, datos ficticios para practicar y plan de 30 días",
   "La lista de verificación de qué nunca se sube a un chat",
+  "Un grupo de WhatsApp para resolver dudas durante el reto y 30 días después",
 ] as const;
 
 export const FAQ_EMPIEZA = [
@@ -280,17 +311,34 @@ export const FAQ_EMPIEZA = [
   {
     pregunta: "¿Necesito Claude Pro?",
     respuesta:
-      "Sí, es necesaria. Lo que vemos en el reto (scripts, skills, lotes de XML) consume bastantes más tokens que un chat normal, y el plan gratuito se agota a media práctica. No queremos que te quedes limitado y no puedas seguir la clase. Cuesta US$20 al mes (aprox. $400 MXN), se paga aparte y puedes cancelarla antes de que se renueve.",
+      "Sí, es necesaria. Lo que vemos en el reto (scripts, skills, lotes de XML) consume bastantes más tokens que un chat normal, y el plan gratuito se agota a media práctica. No queremos que te quedes limitado y no puedas seguir el reto. Cuesta US$20 al mes (aprox. $400 MXN), se paga aparte y puedes cancelarla antes de que se renueve.",
   },
   {
-    pregunta: "¿A qué hora son las sesiones?",
+    // Israel, 2026-11-11: "clases grabadas" sale del hero y del cierre, pero no se trata de
+    // ocultarlo: esta pregunta lo dice de frente.
+    pregunta: "¿Las clases son grabadas?",
     respuesta:
-      "De lunes a viernes de 17:30 a 18:30, hora del centro de México. Dura una hora; el resto de la tarde queda libre para que lo apliques el mismo día.",
+      "Una parte, sí. Lo que se explica (conceptos, ejemplos, casos de uso y ejercicios) va en una clase grabada y editada que se libera a las 9:00 de cada día. Al estar editada, no se pierde tiempo: va directo a lo que necesitas saber para trabajar ese día. Y cada día tiene, además, su sesión en vivo por Zoom de 17:30 a 18:00 para ver un caso real, resolver tus dudas y llevar los ejemplos más lejos. La idea es que el tiempo en vivo no se gaste en explicar conceptos, sino en aplicarlos.",
+  },
+  {
+    pregunta: "¿A qué hora son las clases y las sesiones?",
+    respuesta:
+      "De lunes a viernes, hora del centro de México. A las 9:00 se libera la clase del día, grabada, y la ves cuando te acomode, siempre antes de la sesión de la tarde, que es donde se aplica lo que viste. Por la tarde, de 17:30 a 18:00, hay una sesión por Zoom para dudas y práctica sobre tu caso. En la sesión no se enseña nada nuevo: la teoría está en la clase.",
   },
   {
     pregunta: "¿Qué pasa si falto un día?",
     respuesta:
-      "Tienes la grabación. Pero cada día se apoya en el anterior y termina con algo hecho en tu pantalla, así que conviene no saltarse ninguno. Si ya sabes que vas a faltar a varios, mejor espera la siguiente edición.",
+      "Casi nada, y por eso el formato es así: la clase queda grabada y la sesión de la tarde no enseña nada nuevo, solo dudas y práctica. Si no puedes conectarte, ves la clase cuando puedas y no pierdes contenido. Eso sí, cada día se apoya en el anterior y termina con algo hecho en tu pantalla, así que conviene no atrasarte. Si ya sabes que no vas a poder dedicarle tiempo a varios días, mejor espera la siguiente edición.",
+  },
+  {
+    pregunta: "¿Qué incluye el kit?",
+    respuesta:
+      "Guías de trabajo por día, el proyecto base de Claude con las instrucciones del despacho, una biblioteca de prompts por régimen y tarea, el checklist para revisar una respuesta antes de firmar, scripts probados, skills para instalar en tu cuenta, datos ficticios para practicar y una plantilla de plan de 30 días. Se está produciendo y se entrega completo antes de que empiece el reto.",
+  },
+  {
+    pregunta: "¿Qué quiere decir que lo que armo sea \"profesional\"?",
+    respuesta:
+      "Cada entregable tiene que cumplir cuatro cosas. Seguro: no sube datos que no debe y sabes qué configurar. Verificable: cita el fundamento y tú revisas antes de firmar; la IA propone, tú firmas. Repetible: da el mismo resultado el mes siguiente. Reutilizable: queda guardado y lo puede usar alguien más de tu despacho. No se promete dominar Claude en cinco días: se promete un estándar de trabajo y piezas listas para usar el lunes siguiente.",
   },
   {
     pregunta: "¿Y si no me convence?",
@@ -300,7 +348,7 @@ export const FAQ_EMPIEZA = [
   {
     pregunta: "¿Por qué solo 25 lugares?",
     respuesta:
-      "Porque cada día termina con algo hecho en la pantalla de cada quien, y con más gente eso se vuelve conferencia. El cupo no se sube: si se llena, se abre otra edición.",
+      "Porque en la sesión de la tarde se trabaja sobre el caso de cada quien, y con más gente eso se vuelve conferencia. El cupo no se sube: si se llena, se abre otra edición.",
   },
   {
     pregunta: "¿Cuánto cuesta?",
