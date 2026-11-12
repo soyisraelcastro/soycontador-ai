@@ -91,7 +91,7 @@ export const EMPIEZA = {
   descripcion:
     "Reto de 5 días para contadores que quieren pasar de probar la inteligencia artificial a trabajar con ella. Cada día te llega una clase grabada a las 9:00 y, por la tarde, de 17:30 a 18:00, hay una sesión por Zoom para dudas y práctica. Cada día termina con algo hecho en tu pantalla: un proyecto de Claude para tu despacho, un lote de XML revisado y conciliado, el ISR de sueldos como script probado, un cálculo con su fundamento y tus flujos empaquetados. Lo que armas busca ser seguro, verificable, repetible y reutilizable, y te llevas un kit para trabajar con ello. Sin conocimientos previos.",
   horario: `clase grabada a las ${HORARIO.clase} y sesión por Zoom de ${HORARIO.inicio} a ${HORARIO.fin}, hora del centro de México, de lunes a viernes`,
-  duracion: "5 clases grabadas y 5 sesiones por Zoom de 30 min",
+  duracion: "5 clases + 5 sesiones por Zoom",
   sede: "Clases grabadas en línea y sesión diaria por Zoom",
   cupo: 25,
   precio: PRECIO,
@@ -285,7 +285,7 @@ export const ALCANCE = {
  * ni que las sesiones de la tarde se graben: eso sigue por decidir.
  */
 export const INCLUYE = [
-  "Las 5 clases grabadas: se liberan a las 9:00 de cada día y las ves cuando puedas, también para repasar",
+  "Las 5 clases se liberan a las 9:00 de cada día y las ves cuando puedas",
   "Las 5 sesiones por Zoom de 17:30 a 18:00, en grupo de 25, para dudas y práctica sobre tu caso",
   "El kit completo, que recibes antes de que empiece el reto: guías de trabajo, proyecto base de Claude, biblioteca de prompts, checklist de revisión, scripts probados, skills, datos ficticios para practicar y plan de 30 días",
   "La lista de verificación de qué nunca se sube a un chat",
@@ -312,6 +312,13 @@ export const FAQ_EMPIEZA = [
     pregunta: "¿Necesito Claude Pro?",
     respuesta:
       "Sí, es necesaria. Lo que vemos en el reto (scripts, skills, lotes de XML) consume bastantes más tokens que un chat normal, y el plan gratuito se agota a media práctica. No queremos que te quedes limitado y no puedas seguir el reto. Cuesta US$20 al mes (aprox. $400 MXN), se paga aparte y puedes cancelarla antes de que se renueve.",
+  },
+  {
+    // Israel, 2026-11-11: "clases grabadas" sale del hero y del cierre, pero no se trata de
+    // ocultarlo: esta pregunta lo dice de frente.
+    pregunta: "¿Las clases son grabadas?",
+    respuesta:
+      "Una parte, sí. Lo que se explica (conceptos, ejemplos, casos de uso y ejercicios) va en una clase grabada y editada que se libera a las 9:00 de cada día. Al estar editada, no se pierde tiempo: va directo a lo que necesitas saber para trabajar ese día. Y cada día tiene, además, su sesión en vivo por Zoom de 17:30 a 18:00 para ver un caso real, resolver tus dudas y llevar los ejemplos más lejos. La idea es que el tiempo en vivo no se gaste en explicar conceptos, sino en aplicarlos.",
   },
   {
     pregunta: "¿A qué hora son las clases y las sesiones?",
