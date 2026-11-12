@@ -157,7 +157,7 @@ export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
  */
 export const VIDEO_EMPIEZA: { id: string | null; titulo: string; poster: string; cinta: string } = {
   id: "GbCj4TaRtKg",
-  titulo: "Por qué tomar el reto Empieza aquí",
+  titulo: "Empieza aquí: el reto de 5 días con Claude",   // el mismo nombre que nas.com y que RETO.nombreCompleto (Israel, 2026-11-11)
   poster: "/assets/empieza-video.jpg",
   cinta: "Por qué empezar aquí",
 };
