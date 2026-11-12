@@ -19,7 +19,7 @@ import {
   edicionesVigentes,
 } from "../lib/empieza";
 import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
-import { SITE, type Enlace } from "../lib/site";
+import { EBOOK, SITE, type Enlace } from "../lib/site";
 import { TESTIMONIOS } from "../lib/testimonios";
 
 const video = empiezaVideo();
@@ -307,11 +307,46 @@ const CTA: Enlace = urlAbierta
                 desarrollador de software. Empecé capturando pólizas y peleándome
                 con el portal del SAT, igual que tú.
               </p>
+              {/*
+                El arsenal (Israel, 2026-11-11: "saquémoslo a presumir"). Solo lo que
+                está publicado y en producción, con los datos de herramientas.ts,
+                site.ts (EBOOK, PERSONA) y el README de leyes-mx. Sin cifras de
+                usuarios: no hay una fuente verificada.
+              */}
+              <p class="autor-lead">
+                No te enseño algo que leí: construyo con la IA las herramientas que
+                uso en el trabajo fiscal, y todas están en producción.
+              </p>
+              <ul class="arsenal">
+                <li>
+                  <a href="https://todoconta.com" rel="noopener">TodoConta</a>: nació en 2012 como
+                  blog y hoy es software fiscal. Descarga masiva de CFDI del SAT, constancia,
+                  opinión 32-D, listas negras y nómina, con una API que ya usan otras empresas.
+                </li>
+                <li>
+                  <a href="https://todoconta.com/mcp" rel="noopener">La conexión MCP con el SAT</a>:
+                  Claude trabaja directo con tus CFDI, sin copiar datos de clientes a un chat.
+                </li>
+                <li>
+                  <a href="https://todoconta.com/abacus" rel="noopener">Abacus</a>: un asistente
+                  fiscal por WhatsApp y Telegram.
+                </li>
+                <li>
+                  <a href="https://leyes.todoconta.com" rel="noopener">leyes-mx</a>: la LISR, la LIVA,
+                  el CFF, la LFT, la LSS y sus reglamentos, artículo por artículo, para que Claude
+                  cite la ley en lugar de inventarla. Es abierta y gratis, y la instalas el jueves del reto.
+                </li>
+                <li>
+                  <a href="/ebook">{EBOOK.titulo}</a>, mi libro: 17 capítulos para entender la IA
+                  sin código ni jerga.
+                </li>
+              </ul>
               <p>
-                Cada jueves resuelvo un problema de despacho en vivo en{" "}
-                <a href="/jueves">Jueves de ContadorIA</a>, y doy los módulos de
+                Además, desde julio de 2026 cada jueves resuelvo un problema de despacho
+                en vivo en <a href="/jueves">Jueves de ContadorIA</a>, y doy los módulos de
                 Claude Code y de Excel en {COLABORACION?.nombre ?? "Claude para Contadores"}. Este reto
-                es lo que le daría a alguien que quiere pasar de probar la IA a trabajar con ella.
+                es lo que le daría a alguien que quiere pasar de probar la IA a trabajar con ella:
+                la misma forma de trabajar con la que construyo todo esto.
               </p>
             </div>
             <img
@@ -915,6 +950,32 @@ const CTA: Enlace = urlAbierta
     color: var(--color-accent);
     font-weight: 700;
     text-decoration: none;
+  }
+  .autor .autor-lead {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .arsenal {
+    list-style: none;
+    margin: 0 0 1.1rem;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .arsenal li {
+    position: relative;
+    padding-left: 1.1rem;
+    color: var(--color-ink-soft);
+  }
+  .arsenal li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--color-accent);
   }
 
   /* ---- Línea de tiempo del reto (#la-semana) ----
