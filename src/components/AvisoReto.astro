@@ -2,23 +2,19 @@
 /**
  * El aviso de arriba de todo: el reto de 5 días tiene fecha y cuenta regresiva.
  *
- * Vive DENTRO de la cabecera (Nav.astro), como su primer renglón, así que se
- * queda pegado arriba al bajar junto con el menú. BaseLayout lo pide en todas
- * las páginas menos en /empieza (ahí sobra) y en las de captación (`desnudo`).
- *
- * Cuándo sale y cuándo no:
- * - En el build: solo si hay una edición con lugares y checkout
- *   (`edicionAbierta()`). Sin edición no se pinta nada.
- * - En el navegador: la cuenta regresiva se escribe con la fecha del día, y al
- *   terminar el primer día de la edición (`cierreDeAviso`) el aviso se
- *   esconde solo, aunque el sitio no se haya vuelto a publicar (ver
- *   lib/reto-vivo.ts, que corre desde BaseLayout).
- * - Quien lo cierra con la × no lo vuelve a ver en esa pestaña.
+ * Va antes de la cabecera y NO es pegajoso: se va al bajar y la cabecera queda
+ * arriba como siempre. Lo monta BaseLayout en todas las páginas menos en
+ * /empieza (ahí sobra) y en las de captación (`desnudo`). Se pinta solo si hay
+ * una edición con lugares y checkout; cuando la edición arranca se apaga solo
+ * (ver lib/reto-vivo.ts), aunque nadie reconstruya el sitio. Se probó fijo
+ * dentro de la cabecera y se regresó (Israel, 2026-11-13): se va al bajar.
  *
  * Medición: el enlace lleva `data-reto` y Analytics.astro manda `clic_reto`
  * con la ubicación y la página. NO lleva utm_*: un utm en un enlace interno
  * pisa la fuente real de la visita (el anuncio, Instagram) en GA4 y en
  * lib/origen.ts. El `?desde=` solo marca la ruta en los informes de páginas.
+ *
+ * Se puede cerrar, y se queda cerrado lo que dura la pestaña.
  */
 import { EMPIEZA, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
 
@@ -30,18 +26,17 @@ const fecha = inicio
 ---
 
 {edicion && inicio && (
-  <div class="aviso-reto" data-cierra={cierreDeAviso(edicion)} data-aviso-reto={edicion.inicio}>
+  <aside class="aviso-reto" aria-label="Próximo reto" data-cierra={cierreDeAviso(edicion)} data-aviso-reto={edicion.inicio}>
     <a class="aviso-enlace" href="/empieza?desde=aviso" data-reto="aviso">
       <span class="aviso-punto" aria-hidden="true"></span>
       <span class="aviso-cuenta" data-faltan={inicio}>Empieza el {fecha}</span>
       <span class="aviso-texto">
         <b>Empieza aquí:</b> el reto de 5 días con Claude<span class="aviso-extra"> · {EMPIEZA.cupo} lugares</span>
       </span>
-      <span class="aviso-corto">Reto de 5 días</span>
-      <span class="aviso-cta">Aparta<span class="aviso-extra"> tu lugar</span> <span aria-hidden="true">→</span></span>
+      <span class="aviso-cta">Aparta tu lugar <span aria-hidden="true">→</span></span>
     </a>
     <button type="button" class="aviso-cerrar" aria-label="Cerrar el aviso">×</button>
-  </div>
+  </aside>
 )}
 
 {/* Antes de pintar: si ya lo cerró en esta pestaña, ni se asoma. */}
@@ -55,17 +50,23 @@ const fecha = inicio
 <style>
   .aviso-reto {
     position: relative;
+    display: flex;
+    align-items: stretch;
     background: var(--color-terminal-bg);
     color: var(--color-terminal-bright);
     border-bottom: 1px solid var(--color-terminal-chrome);
   }
+  .aviso-reto[hidden] {
+    display: none;
+  }
   .aviso-enlace {
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 0.35rem 0.9rem;
-    padding: 0.6rem 3rem 0.6rem 1rem;
+    padding: 0.7rem 3rem 0.7rem 1rem;
     color: inherit;
     text-decoration: none;
     font-size: 0.9rem;
@@ -73,7 +74,6 @@ const fecha = inicio
     text-align: center;
   }
   .aviso-punto {
-    flex: none;
     width: 0.55rem;
     height: 0.55rem;
     border-radius: 50%;
@@ -87,14 +87,10 @@ const fecha = inicio
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    white-space: nowrap;
     color: var(--color-marker);
   }
   .aviso-texto b {
     font-weight: 700;
-  }
-  .aviso-corto {
-    display: none;
   }
   .aviso-cta {
     font-weight: 700;
@@ -135,38 +131,15 @@ const fecha = inicio
     color: var(--color-terminal-bright);
     background: var(--color-terminal-chrome);
   }
-  /* En el teléfono, un solo renglón: como va pegado arriba, cada renglón de
-     más es pantalla que se le quita a la página. Queda la cuenta, el nombre
-     corto y "Aparta →". */
+  /* En el teléfono: la cuenta, el nombre corto y el botón. El cupo se va. */
   @media (max-width: 640px) {
     .aviso-enlace {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 0.6rem;
-      padding: 0.5rem 2.6rem 0.5rem 0.9rem;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
+      gap: 0.3rem 0.6rem;
+      padding-right: 2.75rem;
     }
-    .aviso-cuenta {
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-    }
-    .aviso-texto,
     .aviso-extra {
       display: none;
-    }
-    .aviso-corto {
-      display: inline;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .aviso-cta {
-      margin-left: auto;
-      padding: 0.25rem 0.7rem;
-    }
-    .aviso-cerrar {
-      right: 0.25rem;
     }
   }
   @keyframes aviso-late {
@@ -188,10 +161,11 @@ const fecha = inicio
 </style>
 
 <script>
+  /* La cuenta regresiva y el apagado por fecha los resuelve lib/reto-vivo.ts,
+     que corre desde BaseLayout en todas las páginas. */
+
   /* El alto del aviso, para que la portada de la home siga cabiendo en la
-     primera pantalla (index.astro lo resta de su min-height). Al cerrarlo, la
-     cabecera se encoge: el evento resize hace que las hojas de la home vuelvan
-     a medir dónde se pegan (Hojas.astro escucha resize). */
+     primera pantalla (index.astro lo resta de su min-height). */
   const aviso = document.querySelector<HTMLElement>("[data-aviso-reto]");
   const raiz = document.documentElement;
   const publicar = () => raiz.style.setProperty("--alto-aviso", `${aviso && !aviso.hidden ? aviso.offsetHeight : 0}px`);
@@ -201,7 +175,6 @@ const fecha = inicio
     aviso.querySelector(".aviso-cerrar")?.addEventListener("click", () => {
       aviso.hidden = true;
       publicar();
-      dispatchEvent(new Event("resize"));
       try {
         sessionStorage.setItem("aviso-reto-cerrado", aviso.dataset.avisoReto ?? "");
       } catch {}

@@ -370,13 +370,12 @@ testimonios).
 
 **El reto fuera de /empieza (2026-11-13).** Tres piezas:
 
-- El **aviso de arriba** (`AvisoReto.astro`) vive DENTRO de la cabecera
-  pegajosa (`Nav.astro`, prop `aviso`), así que se queda fijo al bajar y todo
-  lo que mide la cabecera (las hojas de la home, la franja de etapas) cuenta
-  su alto solo. `BaseLayout` lo pide en todas las páginas menos `/empieza` y
-  las de captación. Sale solo si al construir hay edición abierta, y el
-  navegador lo esconde al terminar el primer día de la edición. En el
-  teléfono va en un renglón. Se puede cerrar por pestaña.
+- El **aviso de arriba** (`AvisoReto.astro`) va ANTES de la cabecera y no es
+  pegajoso: se va al bajar (se probó fijo y se regresó, Israel 2026-11-13).
+  `BaseLayout` lo monta en todas las páginas menos `/empieza` y las de
+  captación. Sale solo si al construir hay edición abierta, y el navegador lo
+  esconde al terminar el primer día de la edición. Se puede cerrar por
+  pestaña.
 - La **tarjeta "Empieza aquí"** de la portada de la home y la **sección "El
   primer paso"** de `/capacitacion` se quedan SIEMPRE. Con edición abierta
   llevan fecha y cuenta regresiva; sin ella, "próxima fecha por anunciar", y

@@ -4,24 +4,17 @@
  * de cada página (sus propias anclas) y no del sitio; sin `nav` no hay lista y
  * sin `cta` no hay botón, y queda solo el logotipo.
  */
-import AvisoReto from "./AvisoReto.astro";
 import type { Enlace } from "../lib/site";
 
 interface Props {
   nav?: readonly Enlace[];
   cta?: Enlace;
-  /** El aviso del reto como primer renglón de la cabecera (ver AvisoReto). */
-  aviso?: boolean;
 }
 
-const { nav = [], cta, aviso = false } = Astro.props;
+const { nav = [], cta } = Astro.props;
 ---
 
 <header class="site-header">
-  {/* Dentro de la cabecera y no antes de ella: así viaja pegado con el menú,
-      y todo lo que mide la cabecera (las hojas de la home, la franja de
-      etapas) ya cuenta su alto sin saber que existe. */}
-  {aviso && <AvisoReto />}
   <nav class="container-default site-nav" aria-label="Principal">
     {/*
       Logotipo "Contrapartida" (elegido el 2026-10-01, design/MUNDOS.md §8):

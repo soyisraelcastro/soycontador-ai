@@ -2,6 +2,7 @@
 import "../styles/global.css";
 
 import Analytics from "../components/Analytics.astro";
+import AvisoReto from "../components/AvisoReto.astro";
 import JsonLd from "../components/JsonLd.astro";
 import Nav from "../components/Nav.astro";
 import Pie from "../components/Pie.astro";
@@ -67,7 +68,8 @@ const conAviso = !desnudo && Astro.url.pathname.replace(/\/+$/, "") !== "/empiez
     <Analytics />
   </head>
   <body>
-    <Nav nav={desnudo ? undefined : nav} cta={desnudo ? undefined : cta} aviso={conAviso} />
+    {conAviso && <AvisoReto />}
+    <Nav nav={desnudo ? undefined : nav} cta={desnudo ? undefined : cta} />
 
     <slot />
 
