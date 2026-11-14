@@ -140,13 +140,23 @@ export function edicionAbierta(hoy = new Date()): Edicion | null {
 }
 
 /**
- * Hasta cuándo se anuncia una edición fuera de /empieza (el aviso de arriba,
- * la tarjeta de la home y la de /capacitacion): el final del primer día. El
- * sitio es estático y nadie lo reconstruye a medianoche, así que la fecha va
- * en el HTML (`data-cierra`) y el navegador apaga el anuncio solo.
+ * Las dos fechas que mueven los anuncios del reto (el aviso de arriba, la
+ * tarjeta de la home, la sección de /capacitacion y el modo "avísame" de
+ * /empieza). El sitio es estático y nadie lo reconstruye a medianoche, así
+ * que van en el HTML (`data-desde`, `data-cierra`) y el navegador cambia el
+ * texto solo (lib/reto-vivo.ts).
+ *
+ * - `finPrimerDia`: hasta aquí dice "faltan N días"; después, "ya empezó,
+ *   aún te puedes sumar" (Israel, 2026-11-13).
+ * - `cierreDeAviso`: el final del último día. Después ya no se anuncia la
+ *   edición y /empieza pasa a pedir el correo para la siguiente.
  */
-export function cierreDeAviso(e: Edicion): string {
+export function finPrimerDia(e: Edicion): string {
   return `${e.inicio}T23:59:59${HORARIO.zona}`;
+}
+
+export function cierreDeAviso(e: Edicion): string {
+  return `${e.fin}T23:59:59${HORARIO.zona}`;
 }
 
 /** URL de compra de una edición, con UTM de la página. */

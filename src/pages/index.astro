@@ -10,7 +10,7 @@ import { Icon } from "astro-icon/components";
 import { FAQ_HOME } from "../lib/faqs";
 import { faqPage, graph, person, testimonioVideo, webSite } from "../lib/schema";
 import { CTA_DIAGNOSTICO, EBOOK, NAV_HOME, SITE } from "../lib/site";
-import { EMPIEZA, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
+import { EMPIEZA, cierreDeAviso, edicionAbierta, finPrimerDia, isoDe } from "../lib/empieza";
 import { TESTIMONIOS } from "../lib/testimonios";
 
 const jsonLd = graph(
@@ -160,7 +160,8 @@ const lineasTerminal = [
             <span class="primer-paso-titulo">Si no sabes por dónde empezar, <em>empieza aquí.</em></span>
             <span class="primer-paso-texto">
               El reto de 5 días con Claude: una clase cada mañana, media hora por Zoom en la tarde y algo hecho en tu pantalla al terminar cada día. Sin saber programar.
-              {reto && <span data-cierra={cierreDeAviso(reto)}> {reto.fechaTexto}, con {EMPIEZA.cupo} lugares.</span>}
+              {reto && <span data-cierra={finPrimerDia(reto)}> {reto.fechaTexto}, con {EMPIEZA.cupo} lugares.</span>}
+              {reto && <span data-desde={finPrimerDia(reto)} data-cierra={cierreDeAviso(reto)} hidden> Ya empezó y aún te puedes sumar: termina el viernes.</span>}
               <span data-desde={reto ? cierreDeAviso(reto) : undefined} hidden={Boolean(reto)}> La próxima fecha está por anunciarse: deja tu correo y te aviso.</span>
             </span>
             <span class="primer-paso-ir">Tu primer paso <span aria-hidden="true">→</span></span>

@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import FaqBlock from "../components/FaqBlock.astro";
 import FormCapacitacion from "../components/FormCapacitacion.astro";
 import FlujoExpediente from "../components/FlujoExpediente.astro";
-import { EMPIEZA, HORARIO, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
+import { EMPIEZA, HORARIO, cierreDeAviso, edicionAbierta, finPrimerDia, isoDe } from "../lib/empieza";
 import {
   CASO_AUDITOR,
   EMPRESARIAL,
@@ -108,6 +108,7 @@ const jsonLd = graph(
           <div class="reto-acciones">
             <ul class="reto-datos">
               {empiezaAbierta && <li data-cierra={cierreDeAviso(empiezaAbierta)}>{empiezaAbierta.fechaTexto}</li>}
+              {empiezaAbierta && <li data-desde={finPrimerDia(empiezaAbierta)} data-cierra={cierreDeAviso(empiezaAbierta)} hidden>Ya empezó: aún te puedes sumar</li>}
               <li data-desde={empiezaAbierta ? cierreDeAviso(empiezaAbierta) : undefined} hidden={Boolean(empiezaAbierta)}>Próxima fecha por anunciar</li>
               <li>Zoom de {HORARIO.inicio} a {HORARIO.fin}, hora del centro</li>
               <li>{EMPIEZA.cupo} lugares por edición</li>

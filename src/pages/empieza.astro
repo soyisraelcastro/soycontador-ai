@@ -18,6 +18,7 @@ import {
   checkoutDe,
   edicionAbierta,
   edicionesVigentes,
+  cierreDeAviso,
 } from "../lib/empieza";
 import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
 import { EBOOK, SITE, WHATSAPP, type Enlace } from "../lib/site";
@@ -84,7 +85,7 @@ const CTA: Enlace = urlAbierta
     RETO, sin "en vivo") y la hora de la tarde es la de la sesión, no la de
     la clase.
   */}
-  <main data-pausa="0.3">
+  <main data-pausa="0.3" data-cierre-venta={abierta ? cierreDeAviso(abierta) : undefined}>
     <div class="mundo" data-mundo="dia">
       <section class="hero">
         <div class="container-default hero-grid">
@@ -411,7 +412,10 @@ const CTA: Enlace = urlAbierta
     Escape y fondo salen solos. Va fuera de <main> y pide su mundo (noche)
     porque el cuadro vive en la capa superior, fuera de las hojas.
   */}
-  {modoAviso && (
+  {/* Se monta siempre: con checkout abierto es el plan B para cuando la
+      edición termine sin que el sitio se haya vuelto a publicar (el script de
+      abajo convierte los botones de compra en "Avísame"). */}
+  {(
     <dialog class="aviso" id="aviso" data-mundo="noche" aria-labelledby="aviso-titulo">
       <form method="dialog" class="aviso-cerrar-form">
         <button class="aviso-cerrar" aria-label="Cerrar">×</button>
@@ -455,8 +459,22 @@ const CTA: Enlace = urlAbierta
      llegó la visita (ver conOrigenDeVisita). Se reescribe el href al cargar y
      no en el clic, para que también sirva con "abrir en pestaña nueva". */
   const visita = new URLSearchParams(location.search);
+
+  /* La edición terminó (pasó el viernes) y el sitio no se ha vuelto a
+     publicar: los botones de compra dejan de vender y abren el "Avísame de la
+     siguiente edición". Sin esto, la página seguiría mandando al checkout de
+     una edición que ya pasó hasta el siguiente despliegue. */
+  const cierreVenta = Date.parse(document.querySelector<HTMLElement>("[data-cierre-venta]")?.dataset.cierreVenta ?? "");
+  const ventaCerrada = !Number.isNaN(cierreVenta) && Date.now() > cierreVenta;
+
   for (const a of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
-    if (aCheckout(a)) a.href = conOrigenDeVisita(a.href, visita);
+    if (!aCheckout(a)) continue;
+    if (ventaCerrada) {
+      a.href = "#apartar";
+      a.removeAttribute("rel");
+      a.setAttribute("data-aviso", "");
+      a.textContent = a.classList.contains("site-cta") ? "Avísame cuándo" : "Avísame de la siguiente edición";
+    } else a.href = conOrigenDeVisita(a.href, visita);
   }
 
   /* AddToCart, y no InitiateCheckout (2026-10-20): nas.com dispara su propio

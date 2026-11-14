@@ -385,13 +385,24 @@ testimonios).
   enlace en `/capacitacion`). El número y los mensajes ya escritos viven en
   `WHATSAPP` de `lib/site.ts`.
 
-Las fechas se resuelven en dos tiempos. En el navegador, `lib/reto-vivo.ts`
-(lo corre `BaseLayout` en todas las páginas): `data-cierra` esconde,
-`data-desde` enseña y `data-faltan` escribe la cuenta regresiva. Al construir,
-`edicionAbierta()` decide si hay edición; para que eso no se quede viejo, el
-workflow `reconstruir-diario.yml` llama cada madrugada al Deploy Hook de
-Vercel (secreto `VERCEL_DEPLOY_HOOK`; sin él no hace nada). Construye `main`
-tal cual está en GitHub, así que no rompe la regla de despliegue.
+Las fechas se resuelven en el navegador, porque el sitio es estático y nadie
+lo reconstruye a medianoche. `lib/reto-vivo.ts` (lo corre `BaseLayout` en
+todas las páginas): `data-desde` enseña, `data-cierra` esconde (con los dos,
+se ve solo entre una fecha y otra) y `data-faltan` escribe la cuenta
+regresiva. Las fechas salen de `lib/empieza.ts`:
+
+| Etapa | Hasta | Aviso de arriba | Tarjeta / sección |
+|---|---|---|---|
+| Antes | `finPrimerDia` (lunes 23:59) | "Faltan N días" / "Empieza hoy" · Aparta tu lugar | fecha y cupo |
+| En curso | `cierreDeAviso` (viernes 23:59) | "Ya empezó" · aún te puedes sumar · Súmate | "ya empezó, aún te puedes sumar" |
+| Después | (siguiente edición) | no sale | "próxima fecha por anunciar" |
+
+Después del viernes, `/empieza` convierte sus botones de compra en "Avísame
+de la siguiente edición" (abre el cuadro del correo) aunque no se haya vuelto
+a publicar: el cuadro se monta siempre y `<main data-cierre-venta>` trae la
+fecha. Se probó con reloj simulado (Playwright `clock.install`) en las cuatro
+etapas. La CLI de Vercel no crea Deploy Hooks (no están en su API pública);
+por eso se resolvió en el navegador y no con una reconstrucción diaria.
 
 Medición: `clic_reto` (`ubicacion`: `aviso`, `home-portada`, `capacitacion`;
 y `pagina`) y `clic_whatsapp` (`ubicacion` y `pagina`, nunca el número).

@@ -16,7 +16,11 @@
  *
  * Se puede cerrar, y se queda cerrado lo que dura la pestaña.
  */
-import { EMPIEZA, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
+import { EMPIEZA, cierreDeAviso, edicionAbierta, finPrimerDia, isoDe } from "../lib/empieza";
+
+/* Dos tiempos: antes de que arranque cuenta los días; del segundo día al
+   viernes dice que ya empezó y que aún te puedes sumar. Después del último
+   día, el aviso se va (data-cierra del aside). */
 
 const edicion = edicionAbierta();
 const inicio = edicion ? isoDe(edicion) : null;
@@ -26,14 +30,18 @@ const fecha = inicio
 ---
 
 {edicion && inicio && (
-  <aside class="aviso-reto" aria-label="Próximo reto" data-cierra={cierreDeAviso(edicion)} data-aviso-reto={edicion.inicio}>
+  <aside class="aviso-reto" aria-label="El reto de 5 días" data-cierra={cierreDeAviso(edicion)} data-aviso-reto={edicion.inicio}>
     <a class="aviso-enlace" href="/empieza?desde=aviso" data-reto="aviso">
       <span class="aviso-punto" aria-hidden="true"></span>
       <span class="aviso-cuenta" data-faltan={inicio}>Empieza el {fecha}</span>
-      <span class="aviso-texto">
+      <span class="aviso-texto" data-cierra={finPrimerDia(edicion)}>
         <b>Empieza aquí:</b> el reto de 5 días con Claude<span class="aviso-extra"> · {EMPIEZA.cupo} lugares</span>
       </span>
-      <span class="aviso-cta">Aparta tu lugar <span aria-hidden="true">→</span></span>
+      <span class="aviso-texto" data-desde={finPrimerDia(edicion)} hidden>
+        El reto de 5 días con Claude ya va en curso. <b>Aún te puedes sumar</b><span class="aviso-extra"> hasta el viernes</span>
+      </span>
+      <span class="aviso-cta" data-cierra={finPrimerDia(edicion)}>Aparta tu lugar <span aria-hidden="true">→</span></span>
+      <span class="aviso-cta" data-desde={finPrimerDia(edicion)} hidden>Súmate <span aria-hidden="true">→</span></span>
     </a>
     <button type="button" class="aviso-cerrar" aria-label="Cerrar el aviso">×</button>
   </aside>
