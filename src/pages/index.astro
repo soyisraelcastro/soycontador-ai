@@ -21,8 +21,7 @@ const jsonLd = graph(
 );
 
 /* El primer paso para quien llega sin saber por dónde empezar: el reto de 5
-   días. Solo si hay edición con lugares; se apaga sola al arrancar
-   (data-cierra, ver lib/reto-vivo.ts). */
+   días. La tarjeta se queda siempre; la fecha, solo si hay edición abierta. */
 const reto = edicionAbierta();
 
 const asientos = [
@@ -146,16 +145,26 @@ const lineasTerminal = [
               </p>
             </div>
           </div>
-          {reto && (
-            <a class="primer-paso" href="/empieza?desde=home" data-reto="home-portada" data-cierra={cierreDeAviso(reto)}>
-              <span class="primer-paso-folio">¿Vas llegando? <b data-faltan={isoDe(reto)}>{reto.fechaTexto}</b></span>
-              <span class="primer-paso-titulo">Si no sabes por dónde empezar, <em>empieza aquí.</em></span>
-              <span class="primer-paso-texto">
-                El reto de 5 días con Claude, {reto.fechaTexto.toLowerCase()}: una clase cada mañana, media hora por Zoom en la tarde y algo hecho en tu pantalla al terminar cada día. Sin saber programar y con {EMPIEZA.cupo} lugares.
-              </span>
-              <span class="primer-paso-ir">Tu primer paso <span aria-hidden="true">→</span></span>
-            </a>
-          )}
+          {/*
+            La puerta para quien llega sin saber por dónde empezar. Se queda
+            SIEMPRE: con edición abierta dice la fecha y la cuenta regresiva;
+            sin ella, que la próxima fecha está por anunciarse, y /empieza le
+            pide el correo. Las dos versiones van en el HTML y el navegador
+            cambia de una a otra al cerrar el primer día (lib/reto-vivo.ts),
+            aunque el sitio no se haya vuelto a publicar.
+          */}
+          <a class="primer-paso" href="/empieza?desde=home" data-reto="home-portada">
+            <span class="primer-paso-folio">
+              ¿Vas llegando? {reto && <b data-faltan={isoDe(reto)} data-cierra={cierreDeAviso(reto)}>{reto.fechaTexto}</b>}
+            </span>
+            <span class="primer-paso-titulo">Si no sabes por dónde empezar, <em>empieza aquí.</em></span>
+            <span class="primer-paso-texto">
+              El reto de 5 días con Claude: una clase cada mañana, media hora por Zoom en la tarde y algo hecho en tu pantalla al terminar cada día. Sin saber programar.
+              {reto && <span data-cierra={cierreDeAviso(reto)}> {reto.fechaTexto}, con {EMPIEZA.cupo} lugares.</span>}
+              <span data-desde={reto ? cierreDeAviso(reto) : undefined} hidden={Boolean(reto)}> La próxima fecha está por anunciarse: deja tu correo y te aviso.</span>
+            </span>
+            <span class="primer-paso-ir">Tu primer paso <span aria-hidden="true">→</span></span>
+          </a>
         </div>
         <span class="baja" aria-hidden="true"><i></i>Baja</span>
       </section>
@@ -1549,9 +1558,6 @@ const lineasTerminal = [
     transition:
       transform 0.3s var(--ease-f),
       box-shadow 0.3s var(--ease-f);
-  }
-  .primer-paso[hidden] {
-    display: none;
   }
   .primer-paso:hover,
   .primer-paso:focus-visible {

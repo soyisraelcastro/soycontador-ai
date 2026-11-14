@@ -84,36 +84,43 @@ const jsonLd = graph(
     {/*
       El escalón de entrada (2026-11-13). Hasta hoy el reto solo aparecía aquí
       como nota dentro de la sección del curso invitado, y quien llegaba a
-      capacitación sin experiencia no lo veía. SIN precio a propósito: en esta
-      página vive el curso de Fiscalistas.AI con el suyo, y dos números juntos
-      vuelven la decisión una comparación de precio (regla de PRECIOS). El
-      precio está en /empieza. Se apaga sola al arrancar la edición.
+      capacitación sin experiencia no lo veía. Se queda SIEMPRE: con edición
+      abierta lleva la fecha y la cuenta regresiva; sin ella, "próxima fecha
+      por anunciar", y /empieza pide el correo. El navegador cambia de una
+      versión a otra al cerrar el primer día (lib/reto-vivo.ts).
+      SIN precio a propósito: en esta página vive el curso de Fiscalistas.AI
+      con el suyo, y dos números juntos vuelven la decisión una comparación de
+      precio (regla de PRECIOS). El precio está en /empieza.
     */}
-    {empiezaAbierta && (
-      <section id="empieza-aqui" data-cierra={cierreDeAviso(empiezaAbierta)}>
-        <div class="container-default">
-          <div class="sec-head"><h2 class="folio">EMPIEZA <b>AQUÍ</b> · EL PRIMER PASO</h2></div>
-          <div class="reto" data-reveal>
-            <div>
-              <p class="folio reto-cuenta"><b data-faltan={isoDe(empiezaAbierta)}>{empiezaAbierta.fechaTexto}</b></p>
-              <h2 class="titulo-lg">Si todavía no trabajas con IA, empieza por el reto de 5 días</h2>
-              <p class="texto">
-                Antes del taller de 8 horas o de capacitar a tu equipo está el escalón de entrada: el reto de 5 días con Claude. Cada mañana se libera una clase a las {HORARIO.clase} y por la tarde hay media hora por Zoom para dudas y práctica. Cada día termina con algo hecho en tu pantalla. Sin saber programar.
-              </p>
-            </div>
-            <div class="reto-acciones">
-              <ul class="reto-datos">
-                <li>{empiezaAbierta.fechaTexto}</li>
-                <li>Zoom de {HORARIO.inicio} a {HORARIO.fin}, hora del centro</li>
-                <li>{EMPIEZA.cupo} lugares por edición</li>
-              </ul>
-              <a class="btn btn-primary" href="/empieza?desde=capacitacion" data-reto="capacitacion">Ver el reto</a>
-              <a class="reto-wa" href={enlaceWhatsApp(WHATSAPP.mensajes.reto)} target="_blank" rel="noopener" data-whatsapp="capacitacion">¿Dudas? Escríbeme por WhatsApp</a>
-            </div>
+    <section id="empieza-aqui">
+      <div class="container-default">
+        <div class="sec-head"><h2 class="folio">EMPIEZA <b>AQUÍ</b> · EL PRIMER PASO</h2></div>
+        <div class="reto" data-reveal>
+          <div>
+            {empiezaAbierta && (
+              <p class="folio reto-cuenta" data-cierra={cierreDeAviso(empiezaAbierta)}><b data-faltan={isoDe(empiezaAbierta)}>{empiezaAbierta.fechaTexto}</b></p>
+            )}
+            <h2 class="titulo-lg">Este es el primer paso. Aquí empieza tu camino con la IA.</h2>
+            <p class="texto">
+              Si todavía no trabajas con IA, antes del taller de 8 horas o de capacitar a tu equipo está el escalón de entrada: el reto de 5 días con Claude. Cada mañana se libera una clase a las {HORARIO.clase} y por la tarde hay media hora por Zoom para dudas y práctica. Cada día termina con algo hecho en tu pantalla. Sin saber programar.
+            </p>
+          </div>
+          <div class="reto-acciones">
+            <ul class="reto-datos">
+              {empiezaAbierta && <li data-cierra={cierreDeAviso(empiezaAbierta)}>{empiezaAbierta.fechaTexto}</li>}
+              <li data-desde={empiezaAbierta ? cierreDeAviso(empiezaAbierta) : undefined} hidden={Boolean(empiezaAbierta)}>Próxima fecha por anunciar</li>
+              <li>Zoom de {HORARIO.inicio} a {HORARIO.fin}, hora del centro</li>
+              <li>{EMPIEZA.cupo} lugares por edición</li>
+            </ul>
+            <a class="btn btn-primary" href="/empieza?desde=capacitacion" data-reto="capacitacion">
+              {empiezaAbierta ? <span data-cierra={cierreDeAviso(empiezaAbierta)}>Ver el reto</span> : null}
+              <span data-desde={empiezaAbierta ? cierreDeAviso(empiezaAbierta) : undefined} hidden={Boolean(empiezaAbierta)}>Avísame de la próxima fecha</span>
+            </a>
+            <a class="reto-wa" href={enlaceWhatsApp(WHATSAPP.mensajes.reto)} target="_blank" rel="noopener" data-whatsapp="capacitacion">¿Dudas? Escríbeme por WhatsApp</a>
           </div>
         </div>
-      </section>
-    )}
+      </div>
+    </section>
 
     <section id="taller">
       <div class="container-default">
@@ -365,9 +372,6 @@ const jsonLd = graph(
     text-align: center;
   }
   /* El reto de 5 días: el escalón de entrada, antes del taller. */
-  #empieza-aqui[hidden] {
-    display: none;
-  }
   .reto {
     display: grid;
     grid-template-columns: 1.4fr 1fr;

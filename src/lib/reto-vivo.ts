@@ -22,12 +22,20 @@ export function textoFaltan(inicioIso: string, ahora = Date.now()): string | nul
   return null;
 }
 
-/** Esconde lo que ya cerró y pone la cuenta regresiva en `[data-faltan]`. */
+/**
+ * Tres atributos:
+ * - `data-cierra`: se esconde pasada esa fecha (lo que anuncia la edición).
+ * - `data-desde`: se enseña pasada esa fecha (la versión sin fecha, "próxima
+ *   fecha por anunciar"; llega en el HTML con `hidden`).
+ * - `data-faltan`: su texto se vuelve la cuenta regresiva a esa fecha.
+ */
 export function retoVivo(ahora = Date.now()): void {
-  for (const el of document.querySelectorAll<HTMLElement>("[data-cierra]")) {
-    const cierra = Date.parse(el.dataset.cierra ?? "");
-    if (!Number.isNaN(cierra) && ahora > cierra) el.hidden = true;
-  }
+  const paso = (iso: string | undefined) => {
+    const t = Date.parse(iso ?? "");
+    return !Number.isNaN(t) && ahora > t;
+  };
+  for (const el of document.querySelectorAll<HTMLElement>("[data-cierra]")) if (paso(el.dataset.cierra)) el.hidden = true;
+  for (const el of document.querySelectorAll<HTMLElement>("[data-desde]")) if (paso(el.dataset.desde)) el.hidden = false;
   for (const el of document.querySelectorAll<HTMLElement>("[data-faltan]")) {
     const texto = textoFaltan(el.dataset.faltan ?? "", ahora);
     if (texto) el.textContent = texto;
