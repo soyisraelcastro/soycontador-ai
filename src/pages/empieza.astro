@@ -4,6 +4,7 @@ import FaqBlock from "../components/FaqBlock.astro";
 import NewsletterForm from "../components/NewsletterForm.astro";
 import Hojas from "../components/Hojas.astro";
 import VideoFacade from "../components/VideoFacade.astro";
+import BotonWhatsApp from "../components/BotonWhatsApp.astro";
 import { COLABORACION } from "../lib/capacitacion";
 import {
   ALCANCE,
@@ -19,7 +20,7 @@ import {
   edicionesVigentes,
 } from "../lib/empieza";
 import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
-import { EBOOK, SITE, type Enlace } from "../lib/site";
+import { EBOOK, SITE, WHATSAPP, type Enlace } from "../lib/site";
 import { TESTIMONIOS } from "../lib/testimonios";
 
 const video = empiezaVideo();
@@ -329,7 +330,7 @@ const CTA: Enlace = urlAbierta
                 </li>
                 <li>
                   <a href="https://todoconta.com/abacus" rel="noopener">Abacus</a>: un asistente
-                  fiscal por WhatsApp y Telegram.
+                  fiscal virtual que te responde 24/7.
                 </li>
                 <li>
                   <a href="https://leyes.todoconta.com" rel="noopener">leyes-mx</a>: la LISR, la LIVA,
@@ -430,6 +431,8 @@ const CTA: Enlace = urlAbierta
       />
     </dialog>
   )}
+
+  <BotonWhatsApp mensaje={WHATSAPP.mensajes.reto} ubicacion="empieza-flotante" />
 </BaseLayout>
 
 <script>

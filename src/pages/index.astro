@@ -10,6 +10,7 @@ import { Icon } from "astro-icon/components";
 import { FAQ_HOME } from "../lib/faqs";
 import { faqPage, graph, person, testimonioVideo, webSite } from "../lib/schema";
 import { CTA_DIAGNOSTICO, EBOOK, NAV_HOME, SITE } from "../lib/site";
+import { EMPIEZA, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
 import { TESTIMONIOS } from "../lib/testimonios";
 
 const jsonLd = graph(
@@ -18,6 +19,10 @@ const jsonLd = graph(
   faqPage(FAQ_HOME, `${SITE.url}/`),
   ...TESTIMONIOS.map(testimonioVideo),
 );
+
+/* El primer paso para quien llega sin saber por dónde empezar: el reto de 5
+   días. La tarjeta se queda siempre; la fecha, solo si hay edición abierta. */
+const reto = edicionAbierta();
 
 const asientos = [
   {
@@ -140,6 +145,26 @@ const lineasTerminal = [
               </p>
             </div>
           </div>
+          {/*
+            La puerta para quien llega sin saber por dónde empezar. Se queda
+            SIEMPRE: con edición abierta dice la fecha y la cuenta regresiva;
+            sin ella, que la próxima fecha está por anunciarse, y /empieza le
+            pide el correo. Las dos versiones van en el HTML y el navegador
+            cambia de una a otra al cerrar el primer día (lib/reto-vivo.ts),
+            aunque el sitio no se haya vuelto a publicar.
+          */}
+          <a class="primer-paso" href="/empieza?desde=home" data-reto="home-portada">
+            <span class="primer-paso-folio">
+              ¿Vas llegando? {reto && <b data-faltan={isoDe(reto)} data-cierra={cierreDeAviso(reto)}>{reto.fechaTexto}</b>}
+            </span>
+            <span class="primer-paso-titulo">Si no sabes por dónde empezar, <em>empieza aquí.</em></span>
+            <span class="primer-paso-texto">
+              El reto de 5 días con Claude: una clase cada mañana, media hora por Zoom en la tarde y algo hecho en tu pantalla al terminar cada día. Sin saber programar.
+              {reto && <span data-cierra={cierreDeAviso(reto)}> {reto.fechaTexto}, con {EMPIEZA.cupo} lugares.</span>}
+              <span data-desde={reto ? cierreDeAviso(reto) : undefined} hidden={Boolean(reto)}> La próxima fecha está por anunciarse: deja tu correo y te aviso.</span>
+            </span>
+            <span class="primer-paso-ir">Tu primer paso <span aria-hidden="true">→</span></span>
+          </a>
         </div>
         <span class="baja" aria-hidden="true"><i></i>Baja</span>
       </section>
@@ -651,7 +676,8 @@ const lineasTerminal = [
   */
   .portada {
     position: relative;
-    min-height: calc(100svh - 4.6rem);
+    /* --alto-aviso: el aviso del reto encima de la cabecera (AvisoReto.astro). */
+    min-height: calc(100svh - 4.6rem - var(--alto-aviso, 0px));
     display: grid;
     align-content: center;
     padding: 4rem 0 5rem;
@@ -1513,6 +1539,86 @@ const lineasTerminal = [
   .eyebrow svg {
     flex: none;
     color: var(--color-ink-dim);
+  }
+  /* "Empieza aquí" en la portada: la puerta para quien llega sin saber por
+     dónde empezar. Tarjeta de papel elevado con el verde solo en el folio y
+     en la salida, para que no compita con el titular. */
+  .primer-paso {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.45rem 2rem;
+    align-items: end;
+    margin-top: 2.75rem;
+    padding: 1.4rem 1.6rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      transform 0.3s var(--ease-f),
+      box-shadow 0.3s var(--ease-f);
+  }
+  .primer-paso:hover,
+  .primer-paso:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px -18px color-mix(in oklab, var(--color-ink) 60%, transparent);
+  }
+  .primer-paso-folio {
+    grid-column: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-dim);
+  }
+  .primer-paso-folio b {
+    margin-left: 0.5rem;
+    color: var(--color-accent);
+  }
+  .primer-paso-titulo {
+    grid-column: 1;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+    line-height: 1.1;
+  }
+  .primer-paso-texto {
+    grid-column: 1;
+    max-width: 62ch;
+    font-size: 0.95rem;
+    color: var(--color-ink-soft);
+  }
+  .primer-paso-ir {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    align-self: center;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--color-accent-contrast);
+    background: var(--color-accent);
+    padding: 0.75rem 1.3rem;
+    border-radius: var(--radius-pill);
+  }
+  .primer-paso:hover .primer-paso-ir {
+    background: var(--color-accent-hover);
+  }
+  @media (max-width: 700px) {
+    .primer-paso {
+      grid-template-columns: 1fr;
+      padding: 1.2rem 1.25rem;
+    }
+    .primer-paso-ir {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
+      margin-top: 0.5rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .primer-paso {
+      transition: none;
+    }
   }
   .hero-micro {
     margin: 1.1rem 0 0;

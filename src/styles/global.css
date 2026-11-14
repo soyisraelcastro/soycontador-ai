@@ -323,3 +323,10 @@ html.js-reveal .hl[data-reveal]:not(.is-visible) {
     background-size: 100% 100%;
   }
 }
+
+/* `hidden` gana siempre. Sin esto, cualquier clase con display (grid, flex)
+   le gana al atributo y lo que el script del reto esconde se queda a la
+   vista (lib/reto-vivo.ts). */
+[hidden] {
+  display: none !important;
+}

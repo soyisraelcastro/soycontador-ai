@@ -97,7 +97,7 @@ export const GET: APIRoute = () => {
 > Ayuda a contadores y despachos a automatizar su operación fiscal con
 > inteligencia artificial: imparte talleres, construye herramientas en
 > producción (TodoConta, conexión MCP entre Claude y los CFDI del SAT,
-> Abacus por WhatsApp) y conduce el live semanal Jueves de ContadorIA.
+> Abacus, un asistente fiscal virtual que responde 24/7) y conduce el live semanal Jueves de ContadorIA.
 > Su diferenciador: no es un capacitador genérico de IA; es contador y
 > desarrollador, y sus credenciales son software real en uso.
 

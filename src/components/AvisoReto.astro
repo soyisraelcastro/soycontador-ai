@@ -1,0 +1,183 @@
+---
+/**
+ * El aviso de arriba de todo: el reto de 5 días tiene fecha y cuenta regresiva.
+ *
+ * Va antes de la cabecera y NO es pegajoso: se va al bajar y la cabecera queda
+ * arriba como siempre. Lo monta BaseLayout en todas las páginas menos en
+ * /empieza (ahí sobra) y en las de captación (`desnudo`). Se pinta solo si hay
+ * una edición con lugares y checkout; cuando la edición arranca se apaga solo
+ * (ver lib/reto-vivo.ts), aunque nadie reconstruya el sitio. Se probó fijo
+ * dentro de la cabecera y se regresó (Israel, 2026-11-13): se va al bajar.
+ *
+ * Medición: el enlace lleva `data-reto` y Analytics.astro manda `clic_reto`
+ * con la ubicación y la página. NO lleva utm_*: un utm en un enlace interno
+ * pisa la fuente real de la visita (el anuncio, Instagram) en GA4 y en
+ * lib/origen.ts. El `?desde=` solo marca la ruta en los informes de páginas.
+ *
+ * Se puede cerrar, y se queda cerrado lo que dura la pestaña.
+ */
+import { EMPIEZA, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
+
+const edicion = edicionAbierta();
+const inicio = edicion ? isoDe(edicion) : null;
+const fecha = inicio
+  ? new Date(inicio).toLocaleDateString("es-MX", { day: "numeric", month: "long", timeZone: "America/Mexico_City" })
+  : null;
+---
+
+{edicion && inicio && (
+  <aside class="aviso-reto" aria-label="Próximo reto" data-cierra={cierreDeAviso(edicion)} data-aviso-reto={edicion.inicio}>
+    <a class="aviso-enlace" href="/empieza?desde=aviso" data-reto="aviso">
+      <span class="aviso-punto" aria-hidden="true"></span>
+      <span class="aviso-cuenta" data-faltan={inicio}>Empieza el {fecha}</span>
+      <span class="aviso-texto">
+        <b>Empieza aquí:</b> el reto de 5 días con Claude<span class="aviso-extra"> · {EMPIEZA.cupo} lugares</span>
+      </span>
+      <span class="aviso-cta">Aparta tu lugar <span aria-hidden="true">→</span></span>
+    </a>
+    <button type="button" class="aviso-cerrar" aria-label="Cerrar el aviso">×</button>
+  </aside>
+)}
+
+{/* Antes de pintar: si ya lo cerró en esta pestaña, ni se asoma. */}
+<script is:inline>
+  try {
+    var av = document.querySelector("[data-aviso-reto]");
+    if (av && sessionStorage.getItem("aviso-reto-cerrado") === av.getAttribute("data-aviso-reto")) av.hidden = true;
+  } catch (e) {}
+</script>
+
+<style>
+  .aviso-reto {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    background: var(--color-terminal-bg);
+    color: var(--color-terminal-bright);
+    border-bottom: 1px solid var(--color-terminal-chrome);
+  }
+  .aviso-reto[hidden] {
+    display: none;
+  }
+  .aviso-enlace {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0.9rem;
+    padding: 0.7rem 3rem 0.7rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    text-align: center;
+  }
+  .aviso-punto {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--color-marker);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-marker) 60%, transparent);
+    animation: aviso-late 1.8s var(--ease-f) infinite;
+  }
+  .aviso-cuenta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-marker);
+  }
+  .aviso-texto b {
+    font-weight: 700;
+  }
+  .aviso-cta {
+    font-weight: 700;
+    color: var(--color-terminal-bg);
+    background: var(--color-marker);
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+    transition: transform 0.2s var(--ease-f);
+  }
+  .aviso-enlace:hover .aviso-cta,
+  .aviso-enlace:focus-visible .aviso-cta {
+    transform: translateX(3px);
+  }
+  .aviso-enlace:focus-visible {
+    outline: 2px solid var(--color-marker);
+    outline-offset: -4px;
+  }
+  .aviso-cerrar {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    translate: 0 -50%;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-terminal-ink);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .aviso-cerrar:hover,
+  .aviso-cerrar:focus-visible {
+    color: var(--color-terminal-bright);
+    background: var(--color-terminal-chrome);
+  }
+  /* En el teléfono: la cuenta, el nombre corto y el botón. El cupo se va. */
+  @media (max-width: 640px) {
+    .aviso-enlace {
+      font-size: 0.82rem;
+      gap: 0.3rem 0.6rem;
+      padding-right: 2.75rem;
+    }
+    .aviso-extra {
+      display: none;
+    }
+  }
+  @keyframes aviso-late {
+    70% {
+      box-shadow: 0 0 0 0.45rem color-mix(in oklab, var(--color-marker) 0%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-marker) 0%, transparent);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aviso-punto {
+      animation: none;
+    }
+    .aviso-cta {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* La cuenta regresiva y el apagado por fecha los resuelve lib/reto-vivo.ts,
+     que corre desde BaseLayout en todas las páginas. */
+
+  /* El alto del aviso, para que la portada de la home siga cabiendo en la
+     primera pantalla (index.astro lo resta de su min-height). */
+  const aviso = document.querySelector<HTMLElement>("[data-aviso-reto]");
+  const raiz = document.documentElement;
+  const publicar = () => raiz.style.setProperty("--alto-aviso", `${aviso && !aviso.hidden ? aviso.offsetHeight : 0}px`);
+  if (aviso) {
+    publicar();
+    new ResizeObserver(publicar).observe(aviso);
+    aviso.querySelector(".aviso-cerrar")?.addEventListener("click", () => {
+      aviso.hidden = true;
+      publicar();
+      try {
+        sessionStorage.setItem("aviso-reto-cerrado", aviso.dataset.avisoReto ?? "");
+      } catch {}
+    });
+  }
+</script>
