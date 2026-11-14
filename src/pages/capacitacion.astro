@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import FaqBlock from "../components/FaqBlock.astro";
 import FormCapacitacion from "../components/FormCapacitacion.astro";
 import FlujoExpediente from "../components/FlujoExpediente.astro";
-import { EMPIEZA, edicionAbierta } from "../lib/empieza";
+import { EMPIEZA, HORARIO, cierreDeAviso, edicionAbierta, isoDe } from "../lib/empieza";
 import {
   CASO_AUDITOR,
   EMPRESARIAL,
@@ -15,7 +15,7 @@ import {
 } from "../lib/capacitacion";
 import { FAQ_CAPACITACION } from "../lib/faqs";
 import { breadcrumbs, capacitacionService, faqPage, graph } from "../lib/schema";
-import { SITE, type Enlace } from "../lib/site";
+import { SITE, WHATSAPP, enlaceWhatsApp, type Enlace } from "../lib/site";
 
 /** Null si la fecha ya pasó: nunca se anuncia una edición vencida. */
 const edicion = edicionVigente();
@@ -80,6 +80,40 @@ const jsonLd = graph(
         </div>
       </div>
     </section>
+
+    {/*
+      El escalón de entrada (2026-11-13). Hasta hoy el reto solo aparecía aquí
+      como nota dentro de la sección del curso invitado, y quien llegaba a
+      capacitación sin experiencia no lo veía. SIN precio a propósito: en esta
+      página vive el curso de Fiscalistas.AI con el suyo, y dos números juntos
+      vuelven la decisión una comparación de precio (regla de PRECIOS). El
+      precio está en /empieza. Se apaga sola al arrancar la edición.
+    */}
+    {empiezaAbierta && (
+      <section id="empieza-aqui" data-cierra={cierreDeAviso(empiezaAbierta)}>
+        <div class="container-default">
+          <div class="sec-head"><h2 class="folio">EMPIEZA <b>AQUÍ</b> · EL PRIMER PASO</h2></div>
+          <div class="reto" data-reveal>
+            <div>
+              <p class="folio reto-cuenta"><b data-faltan={isoDe(empiezaAbierta)}>{empiezaAbierta.fechaTexto}</b></p>
+              <h2 class="titulo-lg">Si todavía no trabajas con IA, empieza por el reto de 5 días</h2>
+              <p class="texto">
+                Antes del taller de 8 horas o de capacitar a tu equipo está el escalón de entrada: el reto de 5 días con Claude. Cada mañana se libera una clase a las {HORARIO.clase} y por la tarde hay media hora por Zoom para dudas y práctica. Cada día termina con algo hecho en tu pantalla. Sin saber programar.
+              </p>
+            </div>
+            <div class="reto-acciones">
+              <ul class="reto-datos">
+                <li>{empiezaAbierta.fechaTexto}</li>
+                <li>Zoom de {HORARIO.inicio} a {HORARIO.fin}, hora del centro</li>
+                <li>{EMPIEZA.cupo} lugares por edición</li>
+              </ul>
+              <a class="btn btn-primary" href="/empieza?desde=capacitacion" data-reto="capacitacion">Ver el reto</a>
+              <a class="reto-wa" href={enlaceWhatsApp(WHATSAPP.mensajes.reto)} target="_blank" rel="noopener" data-whatsapp="capacitacion">¿Dudas? Escríbeme por WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
 
     <section id="taller">
       <div class="container-default">
@@ -329,6 +363,61 @@ const jsonLd = graph(
     line-height: 1.4;
     color: var(--color-ink);
     text-align: center;
+  }
+  /* El reto de 5 días: el escalón de entrada, antes del taller. */
+  #empieza-aqui[hidden] {
+    display: none;
+  }
+  .reto {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2rem 3rem;
+    align-items: center;
+    padding: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+  }
+  @media (max-width: 900px) {
+    .reto {
+      grid-template-columns: 1fr;
+    }
+  }
+  .reto-cuenta {
+    margin: 0 0 0.6rem;
+  }
+  .reto-cuenta b {
+    color: var(--color-accent);
+  }
+  .reto .texto {
+    margin-bottom: 0;
+  }
+  .reto-acciones {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+  .reto-datos {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-ink-soft);
+  }
+  .reto-datos li::before {
+    content: "// ";
+    color: var(--color-accent);
+  }
+  .reto-wa {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--color-accent);
+  }
+  .reto-wa:hover {
+    color: var(--color-accent-hover);
   }
   .mensual {
     display: grid;

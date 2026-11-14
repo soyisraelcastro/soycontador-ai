@@ -2,6 +2,7 @@
 import "../styles/global.css";
 
 import Analytics from "../components/Analytics.astro";
+import AvisoReto from "../components/AvisoReto.astro";
 import JsonLd from "../components/JsonLd.astro";
 import Nav from "../components/Nav.astro";
 import Pie from "../components/Pie.astro";
@@ -33,6 +34,10 @@ interface Props {
 }
 
 const { title, description, image, type, noindex, publicado, actualizado, jsonLd, nav, cta, desnudo = false, mundoPie } = Astro.props;
+
+/* El aviso del reto va en todas las páginas menos en la del reto (ahí sobra)
+   y en las de captación, que son de una sola salida. */
+const conAviso = !desnudo && Astro.url.pathname.replace(/\/+$/, "") !== "/empieza";
 ---
 
 <!doctype html>
@@ -63,6 +68,7 @@ const { title, description, image, type, noindex, publicado, actualizado, jsonLd
     <Analytics />
   </head>
   <body>
+    {conAviso && <AvisoReto />}
     <Nav nav={desnudo ? undefined : nav} cta={desnudo ? undefined : cta} />
 
     <slot />

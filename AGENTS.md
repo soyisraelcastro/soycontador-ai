@@ -368,6 +368,23 @@ Eventos: `alta_newsletter` (con lista), `lead_enviado` (interés y rol),
 de YouTube; lo emite `VideoFacade`, así que cubre el tráiler y los
 testimonios).
 
+**El reto fuera de /empieza (2026-11-13).** El aviso de arriba de todo
+(`AvisoReto.astro`, lo monta `BaseLayout` en todas las páginas menos
+`/empieza` y las de captación), la tarjeta "Empieza aquí" de la portada de la
+home y la sección del reto en `/capacitacion`. Cada enlace lleva `data-reto`
+y manda `clic_reto` con `ubicacion` (`aviso`, `home-portada`, `capacitacion`)
+y `pagina`. El botón de WhatsApp (`BotonWhatsApp.astro`, flotante en
+`/empieza`; enlace en `/capacitacion`) lleva `data-whatsapp` y manda
+`clic_whatsapp` con los mismos dos datos, nunca el número. **Los enlaces
+internos NO llevan `utm_*`:** un utm interno pisa la fuente real de la visita
+en GA4 y en `lib/origen.ts`. Para la ruta basta `?desde=` (se ve en el
+informe de páginas) y el evento. La cuenta regresiva y el apagado por fecha
+se resuelven en el navegador (`lib/reto-vivo.ts`, `data-faltan` y
+`data-cierra`), porque el sitio no se reconstruye cada día. El número y los
+mensajes ya escritos viven en `WHATSAPP` de `lib/site.ts`. En `/capacitacion`
+el reto va SIN precio, por la regla de PRECIOS (ahí vive el curso de
+Fiscalistas.AI con el suyo).
+
 El aviso de privacidad ya declara la medición. Al agregar cualquier
 herramienta nueva hay que actualizarlo en el mismo commit: la obligación de la
 LFPDPPP es informarlo ahí.

@@ -139,6 +139,16 @@ export function edicionAbierta(hoy = new Date()): Edicion | null {
   return edicionesVigentes(hoy).find((e) => !e.agotado && e.checkout) ?? null;
 }
 
+/**
+ * Hasta cuándo se anuncia una edición fuera de /empieza (el aviso de arriba,
+ * la tarjeta de la home y la de /capacitacion): el final del primer día. El
+ * sitio es estático y nadie lo reconstruye a medianoche, así que la fecha va
+ * en el HTML (`data-cierra`) y el navegador apaga el anuncio solo.
+ */
+export function cierreDeAviso(e: Edicion): string {
+  return `${e.inicio}T23:59:59${HORARIO.zona}`;
+}
+
 /** URL de compra de una edición, con UTM de la página. */
 export function checkoutDe(e: Edicion, contenido = "pagina"): string | null {
   return e.checkout ? conUtm(e.checkout, contenido) : null;
