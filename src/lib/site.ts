@@ -232,3 +232,22 @@ export const FOOTER_LINKS = [
   { label: "TodoConta", href: "https://todoconta.com" },
   { label: "Aviso de privacidad", href: "/privacidad" },
 ] as const;
+
+/**
+ * WhatsApp de Israel (el mismo número de WhatsApp Business con el que atiende).
+ * Cada botón manda un mensaje ya escrito que dice de qué viene: así Israel sabe
+ * desde dónde le escriben, y el día que entre el asistente de WhatsApp esa
+ * misma frase es la palabra clave que lo despierta. Desde el 2026-11-13 Abacus
+ * ya no vive en este número: lo que llegue aquí lo contesta Israel.
+ */
+export const WHATSAPP = {
+  /** Con lada de país y sin "+", como lo pide wa.me */
+  numero: "525544753602",
+  mensajes: {
+    reto: "Hola, tengo una duda sobre el reto de 5 días.",
+  },
+} as const;
+
+export function enlaceWhatsApp(mensaje: string): string {
+  return `https://wa.me/${WHATSAPP.numero}?text=${encodeURIComponent(mensaje)}`;
+}

@@ -95,6 +95,15 @@ const pixel = enProduccion ? MEDICION.metaPixel : null;
         return;
       }
 
+      /* Los anuncios del reto fuera de /empieza (el aviso de arriba, la
+         tarjeta de la home, la sección de /capacitacion) y el botón de
+         WhatsApp. `ubicacion` dice cuál, `pagina` en cuál página estaba: con
+         la fuente de la sesión, eso cuenta cómo llegó la gente al reto. */
+      const reto = enlace.closest<HTMLElement>("[data-reto]");
+      if (reto) medir("clic_reto", { ubicacion: reto.dataset.reto, pagina: location.pathname });
+      const wa = enlace.closest<HTMLElement>("[data-whatsapp]");
+      if (wa) medir("clic_whatsapp", { ubicacion: wa.dataset.whatsapp, pagina: location.pathname });
+
       /* El curso con Fiscalistas.AI. Se mide el alias propio, no el destino:
          el destino puede cambiar y el evento tiene que seguir contando lo
          mismo. */

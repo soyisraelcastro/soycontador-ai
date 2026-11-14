@@ -39,7 +39,7 @@ export const HERRAMIENTAS: Herramienta[] = [
   {
     nombre: "Abacus",
     descripcion:
-      "Asistente fiscal mexicano por WhatsApp y Telegram: resuelve dudas de SAT, CFDI e impuestos en el chat donde ya trabajas.",
+      "Asistente fiscal virtual que te responde 24/7: resuelve dudas de SAT, CFDI e impuestos a la hora que te surgen.",
     url: "https://todoconta.com/abacus",
     estado: "disponible",
   },

@@ -368,6 +368,52 @@ Eventos: `alta_newsletter` (con lista), `lead_enviado` (interés y rol),
 de YouTube; lo emite `VideoFacade`, así que cubre el tráiler y los
 testimonios).
 
+**El reto fuera de /empieza (2026-11-13).** Tres piezas:
+
+- El **aviso de arriba** (`AvisoReto.astro`) va ANTES de la cabecera y no es
+  pegajoso: se va al bajar (se probó fijo y se regresó, Israel 2026-11-13).
+  `BaseLayout` lo monta en todas las páginas menos `/empieza` y las de
+  captación. Sale solo si al construir hay edición abierta, y el navegador lo
+  esconde al terminar el primer día de la edición. Se puede cerrar por
+  pestaña.
+- La **tarjeta "Empieza aquí"** de la portada de la home y la **sección "El
+  primer paso"** de `/capacitacion` se quedan SIEMPRE. Con edición abierta
+  llevan fecha y cuenta regresiva; sin ella, "próxima fecha por anunciar", y
+  `/empieza` pide el correo (su modo de aviso). En `/capacitacion` va SIN
+  precio, por la regla de PRECIOS.
+- El **botón de WhatsApp** (`BotonWhatsApp.astro`, flotante en `/empieza`;
+  enlace en `/capacitacion`). El número y los mensajes ya escritos viven en
+  `WHATSAPP` de `lib/site.ts`.
+
+Las fechas se resuelven en el navegador, porque el sitio es estático y nadie
+lo reconstruye a medianoche. `lib/reto-vivo.ts` (lo corre `BaseLayout` en
+todas las páginas): `data-desde` enseña, `data-cierra` esconde (con los dos,
+se ve solo entre una fecha y otra) y `data-faltan` escribe la cuenta
+regresiva. Las fechas salen de `lib/empieza.ts`:
+
+| Etapa | Hasta | Aviso de arriba | Tarjeta / sección |
+|---|---|---|---|
+| Antes | `finPrimerDia` (lunes 23:59) | "Faltan N días" / "Empieza hoy" · Aparta tu lugar | fecha y cupo |
+| En curso | `cierreDeAviso` (viernes 23:59) | "Ya empezó" · aún te puedes sumar · Súmate | "ya empezó, aún te puedes sumar" |
+| Después | (siguiente edición) | no sale | "próxima fecha por anunciar" |
+
+Después del viernes, `/empieza` convierte sus botones de compra en "Avísame
+de la siguiente edición" (abre el cuadro del correo) aunque no se haya vuelto
+a publicar: el cuadro se monta siempre y `<main data-cierre-venta>` trae la
+fecha. Se probó con reloj simulado (Playwright `clock.install`) en las cuatro
+etapas. La CLI de Vercel no crea Deploy Hooks (no están en su API pública);
+por eso se resolvió en el navegador y no con una reconstrucción diaria.
+
+Medición: `clic_reto` (`ubicacion`: `aviso`, `home-portada`, `capacitacion`;
+y `pagina`) y `clic_whatsapp` (`ubicacion` y `pagina`, nunca el número).
+**Los enlaces internos NO llevan `utm_*`:** un utm interno pisa la fuente
+real de la visita en GA4 y en `lib/origen.ts`. Para la ruta basta `?desde=`
+(se ve en el informe de páginas) y el evento.
+
+**Abacus en el copy (2026-11-13):** se describe como "un asistente fiscal
+virtual que te responde 24/7", sin nombrar canal ni plataforma. Dónde vive
+(hoy Telegram) se aclara solo en todoconta.com/abacus.
+
 El aviso de privacidad ya declara la medición. Al agregar cualquier
 herramienta nueva hay que actualizarlo en el mismo commit: la obligación de la
 LFPDPPP es informarlo ahí.

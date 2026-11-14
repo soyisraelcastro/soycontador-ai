@@ -1,0 +1,117 @@
+---
+/**
+ * El botón flotante para escribirle a Israel por WhatsApp.
+ *
+ * Va en la esquina de abajo a la derecha y manda un mensaje ya escrito
+ * (`mensaje`) que dice de qué viene la plática. `ubicacion` es lo que llega a
+ * GA4 en `clic_whatsapp` (lo escucha Analytics.astro); nunca se manda el
+ * número ni nada de la persona. Aparece después de bajar un poco, para no
+ * taparle nada a quien apenas llegó, y sin JavaScript se ve desde el inicio.
+ */
+import { Icon } from "astro-icon/components";
+import { enlaceWhatsApp } from "../lib/site";
+
+interface Props {
+  mensaje: string;
+  ubicacion: string;
+  /** Lo que dice el botón; en el teléfono solo queda el ícono. */
+  texto?: string;
+}
+
+const { mensaje, ubicacion, texto = "¿Dudas? Escríbeme" } = Astro.props;
+---
+
+<a
+  class="boton-wa"
+  href={enlaceWhatsApp(mensaje)}
+  target="_blank"
+  rel="noopener"
+  data-whatsapp={ubicacion}
+  aria-label={`${texto} por WhatsApp`}
+>
+  <Icon name="ph:whatsapp-logo-fill" aria-hidden="true" />
+  <span class="boton-wa-texto">{texto}</span>
+</a>
+
+<style>
+  .boton-wa {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.8rem 1.15rem 0.8rem 0.95rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: none;
+    box-shadow:
+      0 10px 28px -10px color-mix(in oklab, var(--color-ink) 55%, transparent),
+      0 2px 6px -2px color-mix(in oklab, var(--color-ink) 30%, transparent);
+    transition:
+      transform 0.3s var(--ease-f),
+      opacity 0.3s var(--ease-f),
+      background-color 0.2s linear;
+  }
+  .boton-wa :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: none;
+  }
+  .boton-wa:hover {
+    background: var(--color-accent-hover);
+  }
+  .boton-wa:focus-visible {
+    outline: 3px solid var(--color-marker);
+    outline-offset: 3px;
+  }
+  /* Escondido hasta bajar un poco (lo quita el script). Se esconde con
+     transform y visibility, no solo con opacidad: así no se puede enfocar ni
+     tocar mientras no se ve. */
+  :global(html.wa-espera) .boton-wa {
+    transform: translateY(150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  @media (max-width: 640px) {
+    .boton-wa {
+      padding: 0.9rem;
+    }
+    .boton-wa-texto {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .boton-wa :global(svg) {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .boton-wa {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* Aparece pasando media pantalla y ya no se va: un botón que entra y sale
+     con cada scroll distrae más de lo que ayuda. */
+  const raiz = document.documentElement;
+  if (scrollY < innerHeight * 0.5) {
+    raiz.classList.add("wa-espera");
+    const revisa = () => {
+      if (scrollY < innerHeight * 0.5) return;
+      raiz.classList.remove("wa-espera");
+      removeEventListener("scroll", revisa);
+    };
+    addEventListener("scroll", revisa, { passive: true });
+  }
+</script>
