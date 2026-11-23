@@ -507,8 +507,8 @@ y 2,165 en celular.
 | Con reducir movimiento | Todo visible, sin regla | Acordeón quieto (como preguntas) | Todo visible, sin cascada |
 | Lo que dice de la marca | El contador: el libro mayor | El desarrollador: la interacción | El editor: la revista |
 
-**Recomendación: 1 · Catálogo.** Es la más legible para el lector de 45 a 65
-años (todo a la vista, sin tener que descubrir un gesto), es la que mejor
+**Recomendación: 1 · Catálogo.** Es la más legible para el lector del avatar A
+(todo a la vista, sin tener que descubrir un gesto), es la que mejor
 rima con Hojas (las hojas del libro mayor y su catálogo de cuentas), y la regla
 de lectura le da vida sin esconder nada. Si en celular preocupa el largo, el
 catálogo se puede plegar ahí como acordeón, que es exactamente el celular de

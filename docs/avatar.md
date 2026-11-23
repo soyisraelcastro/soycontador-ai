@@ -34,10 +34,20 @@ por qué; perder ese lead a propósito es lo que hace creíble el resto.
 
 ### Quién es
 
-Contador **independiente o de despacho de 1 a 3 personas**, de **45 a 65
-años** (ajuste de Israel, 2026-09-15; antes decía 30 a 50). Es la franja que
-más se siente en desventaja frente a la IA, y es a quien el copy del sitio ya
-le hablaba de facto: la vuelta de la home abre con "esto es para los más
+Contador **independiente o de despacho de 1 a 3 personas**, de **35 a 55
+años, con el centro en 40 a 50** (decisión de Israel, 2026-11-23; antes 45 a
+65, y antes de eso 30 a 50). Se siente en desventaja frente a la IA, pero
+todavía le quedan quince o veinte años de despacho, así que le conviene
+invertir en cambiar cómo trabaja. Lo movieron dos datos: en YouTube (23-ago a
+21-nov de 2026, 18,485 vistas) la mitad de quien ve tiene de 25 a 44 años y
+solo el 31.6% de 45 a 64; y en Meta el 65 o más se llevó el 64% del gasto del
+reto de noviembre sin una sola compra. Lo que se vende (Claude Pro, Zoom,
+scripts, skills, pago en línea) no le estorba a nadie de 40. **La edad de
+quien compra todavía no se sabe:** desde el 2026-11-23 el alta de la comunidad
+en nas.com la pregunta (opcional, por rangos), y con esas respuestas se vuelve
+a revisar este rango.
+
+Es a quien el copy del sitio ya le hablaba de facto: la vuelta de la home abre con "esto es para los más
 jóvenes" y el asiento de cierre presume veinte años de criterio. Dueño de su
 propia chamba: decide su stack y tiene con qué comprar, sin pedirle permiso a
 nadie. Aprendió Excel a fuerza de necesidad y ve la IA como "otra cosa más que
@@ -115,8 +125,9 @@ híbridos" en un título: eso es cómo lo llamamos nosotros.
 3. **"Yo no sé programar."** No hace falta. La habilidad es saber nombrar el
    problema en los términos correctos.
 4. **"Eso es para los jóvenes."** Es al revés, y es la sección de la vuelta en
-   la home: la parte cara de la ecuación son sus años, y esa ya la pagó. Con el
-   rango en 45-65 esta objeción gana peso, no lo pierde.
+   la home: la parte cara de la ecuación son sus años, y esa ya la pagó. Sigue
+   en pie con el rango de 35 a 55: a los 45 ya se oye "esto es para los más
+   jóvenes".
 5. **"Ya pago la suscripción y no le saco ni la cuarta parte."** La que trae el
    default nuevo (el lector que ya paga), y la que mejor vende: no pide
    convencerlo de la IA, pide enseñarle a aprovechar lo que ya está pagando.
@@ -152,6 +163,10 @@ con el de A. El 2026-09-15 se había movido el de A (de 30-50 a 45-65) y aquí
 no se propagó, así que B quedó ocho días arrancando más joven que el
 independiente. No cuadraba: llegar a dueño de un despacho de cinco a cincuenta
 personas toma más años de carrera, no menos.
+
+El **2026-11-23** el de A volvió a moverse (a 35-55) y el de B se quedó en 45 a
+65 **a propósito**: la razón de arriba sigue valiendo, y el dato de YouTube que
+movió a A es del avatar de descubrimiento, no del dueño de despacho.
 
 Tiene entre 30 y 200 clientes recurrentes, la mayoría personas morales de
 régimen general y algunos RESICO. Su equipo es de auxiliares y contadores junior

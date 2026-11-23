@@ -13,7 +13,7 @@ y 111 videos. La historia completa está en
 que es, un canal nuevo, y renombrarlo no cuesta nada.
 
 **Avatar A**, como toda la superficie de YouTube: contador individual o de
-despacho de 1 a 3, de 45 a 65 años, que compra por miedo a quedarse atrás. Al
+despacho de 1 a 3, de 35 a 55 años (centro en 40 a 50), que compra por miedo a quedarse atrás. Al
 socio de despacho se le cierra en LinkedIn, no aquí.
 
 ---

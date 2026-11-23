@@ -11,7 +11,7 @@ Va en la tarjeta de "Con qué sales" (`VIDEO_EMPIEZA` en `src/lib/empieza.ts`).
   le pide, y eso se aprende haciéndolo con alguien al lado.
 - **Una sola herramienta: Claude.** Nada de "la IA" en abstracto ni de comparar
   con ChatGPT.
-- **El avatar es el contador con años de oficio** (45 a 65). La experiencia es
+- **El avatar es el contador con años de oficio** (35 a 55, centro en 40 a 50). La experiencia es
   la ventaja, nunca la carencia. Ni una frase que lo haga sentir atrasado.
 
 ### Qué NO decir (porque lo vuelve caducable o rompe una regla)

@@ -173,7 +173,7 @@ asiento por los cuatro lados.
   galería de lado (`.pista`), que dejaba ver tres puertas y media en escritorio
   y una en celular: la 5 y la 6 casi nadie las veía. Se eligió entre tres
   formas (catálogo, puertas y plana, `MUNDOS.md` §9) por ser la más legible
-  para el lector de 45 a 65. **No se fija**, por lo mismo que no se fijaba la
+  para el lector del avatar A. **No se fija**, por lo mismo que no se fijaba la
   galería: es un menú, y fijarlo obligaría a pasar por las seis.
 - **El plumón** (`.hl`): el marcador verde se traza al entrar; en la home lo
   pasa el lector con el scroll (avanza mientras el renglón cruza la zona de
