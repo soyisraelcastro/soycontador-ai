@@ -11,7 +11,7 @@ salir nunca (ver abajo).
 | [`arquitectura-de-marca.md`](arquitectura-de-marca.md) | Qué propiedad sirve a qué avatar (sitio, Instagram, LinkedIn, YouTube) y por qué no se pisan. |
 | [`youtube/`](youtube/canal.md) | El canal `@soycontadorAI` como superficie de la marca personal: nombre, descripción, los cinco enlaces y el banner. Registra lo que se quedó en la etapa de TodoConta al cambiar de dueño. |
 | [`linkedin/`](linkedin/playbook.md) | LinkedIn como superficie del Avatar B: los tres pilares, el ritmo de tres por semana colgado del live, la humanización que falta y hasta dónde llega la polémica. El lineamiento de origen está al lado. |
-| [`patrocinios/`](patrocinios/README.md) | Cómo se vende una serie de Jueves de ContadorIA a una marca (modelo product-first): hoja ejecutiva, prospectos, playbook de venta y métricas. Trae el fee y los contactos: interno. |
+| [`patrocinios/`](patrocinios/README.md) | Cómo se vende una serie de Jueves de ContadorIA a una marca (modelo product-first): hoja ejecutiva, prospectos, playbook de venta y métricas. **Suspendido el 2026-11-23.** El fee y los contactos viven solo en local (fuera de git). |
 | [`jueves/`](jueves/README.md) | El programa: `episodios.csv` es la **fuente única** del calendario del canal (emitidos, con live y corte, y los que vienen). Lo que se decida sobre temas futuros se escribe ahí. Incluye la encuesta de agosto y sus respuestas. |
 | [`instagram/`](instagram/perfil-landing.md) | El perfil de IG como landing: nombre, bio, un enlace, destacados como menú y las stories fijas de "Empieza aquí". El lineamiento de origen está al lado. |
 | [`taller-empieza-aqui.md`](taller-empieza-aqui.md) | La spec del taller de 2 horas: temario, logística, precio y cupón. Es el escalón anterior a las 8 horas. |
@@ -51,7 +51,7 @@ comparación de cifras.
 | Ancla de $3,500-4,000 MXN/hora | **Interno.** Es piso de cotización, nunca tarifa publicada. |
 | Club de Automatización Fiscal | **Interno.** Cierra por aplicación. |
 | Capacitación empresarial | **Interno.** Solo cotización por llamada tras formulario. |
-| Fee de patrocinio por serie de Jueves de ContadorIA | **Interno.** Solo en `patrocinios/hoja-ejecutiva-noviembre.md`; la versión compartible no trae cifras. Se conversa en llamada. |
+| Fee de patrocinio por serie de Jueves de ContadorIA | **Interno.** Solo en `patrocinios/hoja-ejecutiva-noviembre.md`, que vive en local y fuera de git; la versión compartible no trae cifras. Se conversa en llamada. |
 
 **Al retirar un precio hay que sacarlo de cuatro lugares, no solo de la
 tarjeta:** la página, el nodo `Offer` del JSON-LD, `llms.txt` y

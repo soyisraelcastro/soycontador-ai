@@ -8,8 +8,25 @@ medio, la producción la hace Israel y la marca no toca el guion. La marca
 compra ser dueña de un tema que ya le pertenece en la cabeza del público; no
 compra menciones sueltas ni "dos reels".
 
-**Nada de esta carpeta se publica.** Trae el precio del patrocinio, la lista
-de prospectos y los contactos. Astro solo sirve `src/pages/` y `public/`.
+## Estado: suspendido (2026-11-23)
+
+Israel suspendió la venta de patrocinios. La primera ola salió el 22-oct y no
+prosperó: la única marca que contestó lo hizo cuando la serie de noviembre ya
+iba en curso, e Israel mismo descartó esa opción. No hay serie en venta.
+
+Lo que sigue sirviendo si se retoma: el modelo (serie completa primero, una
+marca dueña del tema), el playbook y la lección de Worky (preguntar en el
+minuto 1 si el contador es su **cliente** o su **canal**). Antes de retomar
+hace falta una serie nueva con fecha y métricas del canal al día; las de
+`metricas.csv` son de septiembre y octubre.
+
+## Qué vive en git y qué no
+
+Astro solo sirve `src/pages/` y `public/`, así que nada de aquí sale en el
+sitio. **Pero el repo de GitHub es público.** Por eso, desde el 2026-11-23, lo
+que trae el fee interno o contactos de terceros vive solo en local y está en
+`.gitignore`: la hoja interna, `prospectos.md`, `prospectos.csv` y
+`mensajes-ola-1.md`. Ojo: siguen en el historial de git anterior a esa fecha.
 
 ## Reglas duras
 
@@ -40,14 +57,14 @@ de prospectos y los contactos. Astro solo sirve `src/pages/` y `public/`.
 
 | Archivo | Qué es |
 |---|---|
-| `hoja-ejecutiva-noviembre.md` | **Interna.** El producto completo: serie, audiencia, qué recibe y qué no el patrocinador, independencia editorial, precio y neto, checklist antes de compartir. |
+| `hoja-ejecutiva-noviembre.md` | **Interna, solo en local.** El producto completo: serie, audiencia, qué recibe y qué no el patrocinador, independencia editorial, precio y neto, checklist antes de compartir. |
 | `hoja-ejecutiva-noviembre-compartible.md` | La que sale de casa (base para PDF o Canva). Archivo aparte a propósito para que la interna nunca se "limpie a mano". |
-| `prospectos.md` | Método de búsqueda, checklist de verificación, rúbrica, exclusiones, shortlist por episodio y primera ola con argumento por marca. |
-| `prospectos.csv` | El pipeline: una fila por empresa, con estado, siguiente paso y fecha de verificación. |
+| `prospectos.md` | **Solo en local.** Método de búsqueda, checklist de verificación, rúbrica, exclusiones, shortlist por episodio y primera ola con argumento por marca. |
+| `prospectos.csv` | **Solo en local.** El pipeline: una fila por empresa, con estado, siguiente paso y fecha de verificación. |
 | `playbook-venta.md` | Calendario hacia atrás, secuencias de contacto con plantillas, llamada de descubrimiento, propuesta, objeciones, contrato, entrega por episodio, informe y renovación. |
 | `metricas-youtube.md` | Qué exportar de YouTube, Instagram, Sendy y GA4, cómo argumenta cada dato y cómo se guarda. |
 | `metricas.csv` | Las fotos de métricas, fechadas, en formato largo. |
-| `mensajes-ola-1.md` | Los mensajes de la primera ola, uno por marca y listos para pegar, con el tema que cada marca posee ya escrito. |
+| `mensajes-ola-1.md` | **Solo en local.** Los mensajes de la primera ola, uno por marca y listos para pegar, con el tema que cada marca posee ya escrito. |
 | `generar-hoja.mjs` | Genera el PDF de la compartible (`pnpm patrocinios:hoja`) con la identidad del sitio. Sale a `salida/`, fuera de git. Si quedan placeholders, el archivo se llama `-borrador.pdf` y no se manda. Se niega a generar la interna. |
 
 Fuera de esta carpeta: `docs/jueves/episodios.csv` lleva la columna
@@ -93,7 +110,7 @@ sección de la llamada de descubrimiento.
   (certera.fiscalistas.ai), la app de monitoreo fiscal de Pepe (José de Jesús
   Pérez Lara), en la que Israel va a mitad en ventas y hace distribución y
   correcciones técnicas. Es el **piloto** del paquete de noviembre, no una
-  venta: sin fee, y por eso no rompe «solo pago fijo», que aplica a marcas
+  venta: sin fee, y por eso no rompe "solo pago fijo", que aplica a marcas
   ajenas. Se entrega exactamente lo que promete la hoja (logo en portada y
   cierre, mención de apertura y cierre, segmento de 60 s sin demo, línea en
   el entregable) para medirlo y llevar números reales a la venta de
@@ -112,9 +129,12 @@ sección de la llamada de descubrimiento.
   analítica, y la solicitud es un `mailto:` a pepe@fiscalistas.ai, que no
   carga la UTM. Para que el piloto se pueda contar (que es el punto del caso de
   estudio), Pepe tiene que hacer una de dos cosas: activar analítica en la
-  página, o que el `mailto` agregue «Vengo de: Jueves de ContadorIA» cuando la
+  página, o que el `mailto` agregue "Vengo de: Jueves de ContadorIA" cuando la
   URL trae `utm_source=soycontador`. Lo segundo es lo más barato y cuenta
-  solicitudes, no visitas. Además, la página dice que el piloto es «para 10
-  clientes de Mesa Privada y Miembros PRO» y que quedan 6 (dato del 13-sep):
+  solicitudes, no visitas. Además, la página dice que el piloto es "para 10
+  clientes de Mesa Privada y Miembros PRO" y que quedan 6 (dato del 13-sep):
   confirmar con Pepe que se abre a la audiencia del canal antes del live.
-
+- **2026-11-23.** Suspendido por Israel (ver "Estado" arriba). La hoja
+  interna, los prospectos y los mensajes de la primera ola salen de git y se
+  quedan en local, porque el repo es público y traían el fee y contactos de
+  terceros.
