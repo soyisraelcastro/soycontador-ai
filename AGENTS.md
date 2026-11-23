@@ -60,10 +60,15 @@ Stack: Astro 7 estático + adapter Vercel (solo `/api/newsletter` es serverless)
     dato sale de tu computadora" para el MCP. Eso solo aplica a la app de ESCRITORIO.
     El contraste honesto: canal controlado vs pegar datos de clientes en chats públicos.
 - Ángulo Avatar A: la experiencia es la VENTAJA ("con todo lo que sé + IA supero a cualquier
-  recién egresado"); nunca tratar la edad como carencia. El rango del avatar es
-  **45 a 65 años** (decisión Israel 2026-09-15; antes 30-50): es la franja que más
-  se siente en desventaja frente a la IA, y esta regla es justo lo que permite
-  hablarle sin insultarla. El modelo es la vuelta de la home: se nombra la
+  recién egresado"); nunca tratar la edad como carencia. El rango del avatar A es
+  **35 a 55 años, con el centro en 40 a 50** (decisión Israel 2026-11-23; antes
+  45-65, y antes 30-50). Lo movió el dato: en YouTube la mitad de las vistas es
+  de 25 a 44 años, el 65 o más se llevó el gasto de Meta sin comprar, y lo que se
+  vende (Claude Pro, Zoom, scripts, skills) no le estorba a nadie de 40. La edad
+  de quien compra se pregunta desde esa fecha en el alta de nas.com; con esas
+  respuestas se revisa. El avatar B (dueño de despacho) se queda en 45-65. Esta
+  regla es justo lo que permite hablarle sin insultarlo: "de carrera" nombra al
+  avatar sin decirle la edad. El modelo es la vuelta de la home: se nombra la
   objeción y se voltea a favor.
 - HERRAMIENTA POR PIEZA (decisión Israel 2026-09-15). Tres niveles que no se
   mezclan:

@@ -12,7 +12,7 @@ Lo marcado `[POR DECIDIR]` o `[VERIFICAR]` no se asume.
 
 Llenar las 25 plazas de cada edición con gente que no conocía a Israel, y
 aprender qué mensaje y qué formato funcionan para el **Avatar A** (contador
-individual, 45 a 65, compra por miedo a quedar obsoleto; ver `avatar.md`).
+individual, 35 a 55, compra por miedo a quedar obsoleto; ver `avatar.md`).
 Los anuncios son una prueba de mensajes antes que una máquina de ventas: con
 25 lugares el volumen de compras será muy bajo.
 
@@ -70,7 +70,7 @@ no el público.
 
 - **Campaña:** objetivo `[POR DECIDIR]` (tráfico a la página o clientes
   potenciales; ver sección 2). Una sola.
-- **Conjunto de anuncios:** México, 45 a 65 `[VERIFICAR]` (Meta limita
+- **Conjunto de anuncios:** México, 35 a 54 (el avatar A desde el 2026-11-23; en octubre se corrió 40-65+) `[VERIFICAR]` (Meta limita
   segmentación por edad en ciertos casos), intereses amplios (contabilidad,
   SAT, despachos). Un solo conjunto al inicio.
 - **Anuncios:** de 5 a 8 creativos que varían UNA cosa a la vez (ver 5).

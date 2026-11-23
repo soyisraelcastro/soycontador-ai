@@ -2,7 +2,7 @@
 
 Este documento establece la hoja de ruta estratégica para posicionar la marca personal @soycontador.ai bajo la metodología de Julio Iero. El objetivo es transformar a un contador técnico en una autoridad disruptiva que utiliza la Inteligencia Artificial para dejar de ser el "gladiador" de la operación y convertirse en el "comerciante" de sistemas escalables.
 
-#### 1\. Perfil del Cliente Ideal (Accountant Persona 45-65)
+#### 1\. Perfil del Cliente Ideal (Accountant Persona 35-55)
 
 El contador independiente en México de esta generación vive bajo el estigma del "esfuerzo lineal". Su herencia cultural le dicta que para ganar más lana hay que meterle más horas de chamba. Para ellos, el éxito es un juego de resistencia física, no de apalancamiento tecnológico.
 
