@@ -33,3 +33,10 @@ pnpm-debug.log*
 # PDF de la hoja de patrocinios: se rehace con pnpm patrocinios:hoja
 docs/patrocinios/salida/
 docs/invitados/salida/
+
+# Patrocinios: lo que trae fee interno o contactos de terceros vive solo en
+# local. El repo es público (2026-11-23).
+docs/patrocinios/hoja-ejecutiva-noviembre.md
+docs/patrocinios/prospectos.md
+docs/patrocinios/prospectos.csv
+docs/patrocinios/mensajes-ola-1.md
