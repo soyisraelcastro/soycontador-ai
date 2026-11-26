@@ -1,5 +1,5 @@
 /**
- * "Empieza aquí": el reto de 5 días (30 de noviembre al 4 de diciembre de 2026).
+ * "Empieza aquí": el reto de 5 días (4 al 8 de enero de 2027; se movió del 30-nov al 4-dic de 2026 el 2026-11-26, sin inscritos por nas.com).
  *
  * Desde el 2026-11-03 (decisión de Israel) esta página ya no vende el taller
  * de 2 horas ($697): vende el último taller del año convertido en reto.
@@ -54,9 +54,9 @@ export interface Edicion {
 
 export const EDICIONES: readonly Edicion[] = [
   {
-    inicio: "2026-11-30",
-    fin: "2026-12-04",
-    fechaTexto: "Del 30 de noviembre al 4 de diciembre",
+    inicio: "2027-01-04",
+    fin: "2027-01-08",
+    fechaTexto: "Del 4 al 8 de enero",
     /* Checkout del reto en nas.com (2026-11-05). Si algún día vuelve a ser
        null, la página deja de mostrar el botón de compra y dice que el registro
        abre en unos días. */
@@ -113,7 +113,7 @@ export const EMPIEZA = {
   /* La garantía SÍ es pública (no es promoción, es confianza), pero lleva su
      condición: haber hecho las cinco entregas. Israel la verifica; nas.com no. */
   garantia:
-    "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 11 de diciembre.",
+    "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 15 de enero.",
 } as const;
 
 /**
@@ -367,7 +367,7 @@ export const FAQ_EMPIEZA = [
   {
     pregunta: "¿Y si no me convence?",
     respuesta:
-      "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 11 de diciembre. La condición de haber hecho las entregas es para que la devolución sea de quien lo intentó de verdad.",
+      "Si haces las cinco entregas y el reto no te convenció, te devuelvo el 100%, sin preguntas. Lo pides hasta el viernes 15 de enero. La condición de haber hecho las entregas es para que la devolución sea de quien lo intentó de verdad.",
   },
   {
     pregunta: "¿Por qué solo 25 lugares?",
