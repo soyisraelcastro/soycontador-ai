@@ -21,7 +21,7 @@ import {
   cierreDeAviso,
 } from "../lib/empieza";
 import { breadcrumbs, empiezaCourse, empiezaVideo, faqPage, graph } from "../lib/schema";
-import { EBOOK, SITE, WHATSAPP, type Enlace } from "../lib/site";
+import { EBOOK, SITE, WHATSAPP, enlaceWhatsApp, type Enlace } from "../lib/site";
 import { TESTIMONIOS } from "../lib/testimonios";
 
 const video = empiezaVideo();
@@ -125,6 +125,12 @@ const CTA: Enlace = urlAbierta
                 )}
                 <a class="btn btn-ghost" href="#la-semana">Ver los cinco días</a>
               </div>
+              {urlAbierta && (
+                <p class="pago">
+                  {EMPIEZA.formasDePago}{" "}
+                  <a href={enlaceWhatsApp(WHATSAPP.mensajes.pago)} target="_blank" rel="noopener" data-whatsapp="empieza-pago-hero">¿Prefieres transferencia? Escríbeme por WhatsApp</a>
+                </p>
+              )}
               {ediciones.length > 1 && (
                 <ul class="fechas" aria-label="Fechas">
                   {ediciones.map((e) => (
@@ -387,6 +393,12 @@ const CTA: Enlace = urlAbierta
                   <button type="button" class="aviso-nota" data-aviso>Clic aquí para apartar tu lugar</button>
                 </div>
               )}
+              {urlAbierta && (
+                <p class="pago">
+                  {EMPIEZA.formasDePago}{" "}
+                  <a href={enlaceWhatsApp(WHATSAPP.mensajes.pago)} target="_blank" rel="noopener" data-whatsapp="empieza-pago-ficha">¿Prefieres transferencia? Escríbeme por WhatsApp</a>
+                </p>
+              )}
               <p class="garantia folio">// {EMPIEZA.garantia.toUpperCase()}</p>
             </div>
           </article>
@@ -629,6 +641,21 @@ const CTA: Enlace = urlAbierta
     margin-top: 0.2rem;
     color: var(--color-ink-dim);
     font-size: 0.85rem;
+  }
+  /* Cómo se paga, bajo el botón de compra. La transferencia va por WhatsApp,
+     donde contesta el agente de Pregón. */
+  .pago {
+    margin: 0.9rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+  .pago a {
+    font-weight: 700;
+    color: var(--color-accent);
+    text-underline-offset: 0.2em;
+  }
+  .compra-der .pago {
+    margin: 0;
   }
   .hero-acciones {
     display: flex;

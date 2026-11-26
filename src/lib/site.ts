@@ -245,6 +245,9 @@ export const WHATSAPP = {
   numero: "525544753602",
   mensajes: {
     reto: "Hola, tengo una duda sobre el reto de 5 días.",
+    /* Con esta frase despierta el agente de WhatsApp de Pregón (src/lib/wa/reglas.ts,
+       FRASES): si se cambia aquí, se cambia allá, o el bot no contesta. */
+    pago: "Hola, quiero apartar mi lugar en el reto de 5 días.",
   },
 } as const;
 
