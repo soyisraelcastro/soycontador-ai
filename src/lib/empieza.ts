@@ -207,10 +207,13 @@ export const VIDEO_EMPIEZA: {
  * `despues` son el salto del día en una línea cada uno; `sale` es el entregable.
  * Sin "programar": el lenguaje es flujo, script que Claude escribe y tú corres,
  * artefacto (Avatar A, ver docs/reto-5-dias.md).
+ *
+ * Sin fecha por día (Israel, 2026-11-26): la fecha de la edición vive en
+ * EDICIONES y la línea de tiempo dice solo el día de la semana, para que mover
+ * el reto no deje fechas viejas en las tarjetas.
  */
 export interface Dia {
   dia: string;
-  fecha: string;
   etapa: string;
   titulo: string;
   texto: string;
@@ -222,7 +225,6 @@ export interface Dia {
 export const DIAS: readonly Dia[] = [
   {
     dia: "Lunes",
-    fecha: "30 nov",
     etapa: "Pides con reglas",
     titulo: "Que te conteste como contador",
     texto:
@@ -233,7 +235,6 @@ export const DIAS: readonly Dia[] = [
   },
   {
     dia: "Martes",
-    fecha: "1 dic",
     etapa: "Le das tus archivos",
     titulo: "Tus archivos, revisados y conciliados",
     texto:
@@ -244,7 +245,6 @@ export const DIAS: readonly Dia[] = [
   },
   {
     dia: "Miércoles",
-    fecha: "2 dic",
     etapa: "Lo vuelves repetible",
     titulo: "El mismo resultado cada vez",
     texto:
@@ -255,7 +255,6 @@ export const DIAS: readonly Dia[] = [
   },
   {
     dia: "Jueves",
-    fecha: "3 dic",
     etapa: "Lo fundamentas",
     titulo: "Tu cálculo, con el artículo en cada renglón",
     texto:
@@ -266,7 +265,6 @@ export const DIAS: readonly Dia[] = [
   },
   {
     dia: "Viernes",
-    fecha: "4 dic",
     etapa: "Lo conviertes en operación",
     titulo: "Tus flujos se quedan contigo",
     texto:
