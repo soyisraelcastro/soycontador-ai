@@ -106,6 +106,10 @@ export const EMPIEZA = {
     costoTexto: "US$20 al mes (aprox. $400 MXN)",
     verificado: "2026-10-13",
   },
+  /* Formas de pago del checkout de nas.com (verificado por Israel en el
+     teléfono el 2026-11-26). Sin "a meses": no se anuncia aunque nas.com lo
+     ofrezca. Quien prefiere transferencia va por WhatsApp (WHATSAPP.mensajes.pago). */
+  formasDePago: "Pagas con tarjeta, OXXO o SPEI.",
   /* La garantía SÍ es pública (no es promoción, es confianza), pero lleva su
      condición: haber hecho las cinco entregas. Israel la verifica; nas.com no. */
   garantia:
