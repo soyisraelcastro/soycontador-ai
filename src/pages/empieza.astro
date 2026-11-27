@@ -164,7 +164,7 @@ const CTA: Enlace = urlAbierta
                     <span class="entregable-num">{String(i + 1).padStart(2, "0")}</span>
                     <span>
                       <b>{d.sale}</b>
-                      <span class="entregable-texto">{d.dia} {d.fecha}</span>
+                      <span class="entregable-texto">{d.dia}</span>
                     </span>
                   </li>
                 ))}
@@ -233,7 +233,7 @@ const CTA: Enlace = urlAbierta
               <li class="dia" id={`dia-${i + 1}`} data-dia>
                 <span class="dia-nodo" aria-hidden="true"></span>
                 <article class="dia-card">
-                  <p class="folio">{d.dia.toUpperCase()} · <b>{d.fecha.toUpperCase()}</b></p>
+                  <p class="folio"><b>{d.dia.toUpperCase()}</b></p>
                   <h3>{d.titulo}</h3>
                   <p class="dia-texto">{d.texto}</p>
                   <p class="bloque-sale"><span class="folio">SALES CON</span> {d.sale}</p>

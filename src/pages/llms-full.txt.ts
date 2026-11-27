@@ -93,7 +93,7 @@ Precio: ${EMPIEZA.precioTexto}, pago único. Requiere una suscripción a ${EMPIE
 Es el paso anterior al curso Claude para Contadores (Fiscalistas.AI).
 
 Los cinco días:
-${DIAS.map((d) => `- ${d.dia} ${d.fecha} (${d.etapa}): ${d.titulo}. ${d.texto} Sales con: ${d.sale}.`).join("\n")}
+${DIAS.map((d) => `- ${d.dia} (${d.etapa}): ${d.titulo}. ${d.texto} Sales con: ${d.sale}.`).join("\n")}
 
 Alcance: ${ALCANCE.si} No incluye: ${ALCANCE.no}
 
